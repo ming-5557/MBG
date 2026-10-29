@@ -54,15 +54,15 @@ export const Gallery: React.FC = () => {
     if (editingPhoto) {
       await dataService.updateMemory({
         ...editingPhoto,
-        title: title || 'Gallery Photo',
+        title: title || '相册照片',
         category,
         photo_url: photoUrl,
         date
       });
     } else {
       await dataService.addMemory({
-        title: title || 'Gallery Photo',
-        description: 'Captured in our couple photo album',
+        title: title || '相册照片',
+        description: '记录在我们的情侣相册中',
         date,
         photo_url: photoUrl,
         category
@@ -80,11 +80,11 @@ export const Gallery: React.FC = () => {
   };
 
   const albums = [
-    { id: 'all', label: 'All Photos' },
-    { id: 'first_date', label: 'First Dates' },
-    { id: 'travel', label: 'Trips & Travel' },
-    { id: 'anniversary', label: 'Anniversaries' },
-    { id: 'daily', label: 'Everyday Smiles' }
+    { id: 'all', label: '全部照片' },
+    { id: 'first_date', label: '表白日' },
+    { id: 'travel', label: '游玩' },
+    { id: 'anniversary', label: '纪念日' },
+    { id: 'daily', label: '每日的笑容' }
   ];
 
   const filteredPhotos = memories.filter((m) => {
@@ -102,13 +102,13 @@ export const Gallery: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-xs font-semibold mb-2">
             <ImageIcon className="w-3.5 h-3.5" />
-            <span>Romantic Photo Vault</span>
+            <span>浪漫照片库</span>
           </div>
           <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-slate-800">
-            Our Photo Gallery
+            我们的相册
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Snapshots of our favorite glances, travels, and quiet moments together.
+            捕捉我们最喜欢的瞬间、旅行以及在一起的静谧时光。
           </p>
         </div>
 
@@ -117,7 +117,7 @@ export const Gallery: React.FC = () => {
           className="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-lg shadow-rose-200 hover:scale-105 transition-all"
         >
           <Plus className="w-4 h-4" />
-          <span>Upload Photo</span>
+          <span>上传照片</span>
         </button>
       </div>
 
@@ -161,14 +161,14 @@ export const Gallery: React.FC = () => {
               <button
                 onClick={(e) => openEditModal(item, e)}
                 className="p-1.5 rounded-full bg-white/90 text-slate-700 hover:text-rose-600 shadow-md backdrop-blur-xs transition-colors"
-                title="Edit Photo"
+                title="编辑照片"
               >
                 <Edit2 className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={(e) => handleDeletePhoto(item.id, e)}
                 className="p-1.5 rounded-full bg-white/90 text-slate-700 hover:text-rose-600 shadow-md backdrop-blur-xs transition-colors"
-                title="Delete Photo"
+                title="删除照片"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
@@ -179,7 +179,7 @@ export const Gallery: React.FC = () => {
               <h4 className="font-serif font-bold text-sm text-white truncate">{item.title}</h4>
               <div className="flex items-center space-x-1 text-[11px] text-rose-200 mt-1">
                 <Maximize2 className="w-3 h-3" />
-                <span>Click to view full photo</span>
+                <span>点击查看大图</span>
               </div>
             </div>
           </motion.div>
@@ -189,8 +189,8 @@ export const Gallery: React.FC = () => {
       {filteredPhotos.length === 0 && (
         <div className="text-center py-16 glass-card rounded-3xl p-8 border border-rose-100">
           <Sparkles className="w-10 h-10 text-rose-400 mx-auto mb-3" />
-          <h4 className="font-serif font-bold text-lg text-slate-800">No photos in this album yet</h4>
-          <p className="text-xs text-slate-500 mt-1">Upload a new photo to add to our love gallery!</p>
+          <h4 className="font-serif font-bold text-lg text-slate-800">这个相册里还没有照片哦</h4>
+          <p className="text-xs text-slate-500 mt-1">上传一张新照片，加入到我们的爱情画廊吧！</p>
         </div>
       )}
 
@@ -205,7 +205,7 @@ export const Gallery: React.FC = () => {
             <div className="p-4 sm:p-5 border-b border-rose-100 flex items-center justify-between shrink-0 bg-white">
               <h3 className="font-serif font-bold text-lg sm:text-xl text-slate-800 flex items-center space-x-2">
                 <ImageIcon className="w-5 h-5 text-rose-500" />
-                <span>{editingPhoto ? 'Edit Gallery Photo' : 'Upload to Photo Gallery'}</span>
+                <span>{editingPhoto ? '编辑照片' : '上传到相册'}</span>
               </h3>
               <button
                 type="button"
@@ -219,10 +219,10 @@ export const Gallery: React.FC = () => {
             <form onSubmit={handleSavePhoto} className="flex flex-col overflow-hidden flex-1">
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Photo Caption / Title</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">照片标题 / 描述</label>
                   <input
                     type="text"
-                    placeholder="e.g. Sunset in Kyoto"
+                    placeholder="例如：京都的日落"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs sm:text-sm outline-none bg-white"
@@ -231,21 +231,21 @@ export const Gallery: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Album Category</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">相册分类</label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value as any)}
                       className="w-full px-3 py-2 rounded-xl border border-rose-200 text-xs sm:text-sm outline-none bg-white"
                     >
-                      <option value="first_date">First Date</option>
-                      <option value="travel">Travel & Trip</option>
-                      <option value="anniversary">Anniversary</option>
-                      <option value="daily">Everyday Smiles</option>
+                      <option value="first_date">表白日</option>
+                      <option value="travel"> 游玩</option>
+                      <option value="anniversary">纪念日</option>
+                      <option value="daily">每日的笑容</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Date Captured</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">拍摄日期</label>
                     <input
                       type="date"
                       value={date}
@@ -257,7 +257,7 @@ export const Gallery: React.FC = () => {
 
                 <MediaUploader
                   bucket="photos"
-                  label="Foto Galeri (Unggah File / Tautan URL)"
+                  label="上传照片（文件或链接）"
                   accept="image/*"
                   value={photoUrl}
                   onChange={setPhotoUrl}
@@ -270,14 +270,14 @@ export const Gallery: React.FC = () => {
                   onClick={() => setIsModalOpen(false)}
                   className="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
                 >
-                  Cancel
+                  取消
                 </button>
                 <button
                   type="submit"
                   disabled={!photoUrl}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-md disabled:opacity-50 hover:scale-105 transition-all"
                 >
-                  {editingPhoto ? 'Update Photo' : 'Save Photo'}
+                  {editingPhoto ? '更新照片' : '保存照片'}
                 </button>
               </div>
             </form>
