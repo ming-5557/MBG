@@ -127,10 +127,10 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
             )}
 
             <div className="text-xs font-medium text-slate-700">
-              {isUploading ? 'Mengunggah file...' : 'Klik atau seret foto ke sini untuk mengunggah'}
+              {isUploading ? 'Mengunggah file...' : '点击或将照片拖拽到这里上传'}
             </div>
             <p className="text-[10px] text-slate-400">
-              Format: PNG, JPG, WEBP, GIF
+              支持格式: PNG, JPG, WEBP, GIF
             </p>
           </div>
         </div>
