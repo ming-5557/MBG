@@ -93,7 +93,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               uploadMode === 'file' ? 'bg-white text-rose-600 shadow-2xs font-bold' : 'text-slate-500'
             }`}
           >
-            Unggah File
+            上传文件
           </button>
           <button
             type="button"
@@ -102,7 +102,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
               uploadMode === 'url' ? 'bg-white text-rose-600 shadow-2xs font-bold' : 'text-slate-500'
             }`}
           >
-            URL Gambar
+            图片链接
           </button>
         </div>
       </div>
