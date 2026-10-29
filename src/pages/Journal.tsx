@@ -208,12 +208,12 @@ export const Journal: React.FC = () => {
                   {entry.content}
                 </p>
 
-                {entry.photo_url && (
-                  <div className="rounded-2xl overflow-hidden max-h-96 bg-slate-100 border border-rose-100/80 shadow-xs">
+               {entry.photo_url && (
+                  <div className="rounded-2xl overflow-hidden bg-slate-50 border border-rose-100/80 shadow-xs flex justify-center">
                     <img
                       src={entry.photo_url}
                       alt={entry.title}
-                      className="w-full h-full object-cover rounded-2xl hover:scale-[1.01] transition-transform duration-300"
+                      className="w-full h-auto max-h-[600px] object-contain rounded-2xl hover:scale-[1.01] transition-transform duration-300"
                       referrerPolicy="no-referrer"
                     />
                   </div>
