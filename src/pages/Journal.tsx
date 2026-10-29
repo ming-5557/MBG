@@ -91,13 +91,14 @@ export const Journal: React.FC = () => {
     await loadData();
   };
 
+  // 👇 心情标签的中文化
   const moodBadges = {
-    joy: { label: '😊 Pure Joy', bg: 'bg-amber-100 text-amber-800' },
-    love: { label: '🥰 So in Love', bg: 'bg-rose-100 text-rose-800' },
-    cozy: { label: '☕ Cozy Day', bg: 'bg-pink-100 text-pink-800' },
-    missing: { label: '🥺 Missing You', bg: 'bg-purple-100 text-purple-800' },
-    adventure: { label: '✈️ Adventure Time', bg: 'bg-sky-100 text-sky-800' },
-    grateful: { label: '🙏 Truly Grateful', bg: 'bg-emerald-100 text-emerald-800' }
+    joy: { label: '😊 纯粹的快乐', bg: 'bg-amber-100 text-amber-800' },
+    love: { label: '🥰 沉浸在爱中', bg: 'bg-rose-100 text-rose-800' },
+    cozy: { label: '☕ 惬意的一天', bg: 'bg-pink-100 text-pink-800' },
+    missing: { label: '🥺 想你', bg: 'bg-purple-100 text-purple-800' },
+    adventure: { label: '✈️ 探险时光', bg: 'bg-sky-100 text-sky-800' },
+    grateful: { label: '🙏 真心感恩', bg: 'bg-emerald-100 text-emerald-800' }
   };
 
   const filteredEntries = entries.filter((e) => {
@@ -115,13 +116,13 @@ export const Journal: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold mb-2">
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Shared Couple Diary</span>
+            <span>情侣共享日记</span>
           </div>
           <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-slate-800">
-            Daily Journal
+            每日日记
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Writing down our everyday thoughts, mood reflections, and small wins.
+            记录我们的日常想法、心情感受和每一个小确幸。
           </p>
         </div>
 
@@ -130,7 +131,7 @@ export const Journal: React.FC = () => {
           className="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-lg shadow-rose-200 hover:scale-105 transition-all"
         >
           <Plus className="w-4 h-4" />
-          <span>New Journal Entry</span>
+          <span>写新日记</span>
         </button>
       </div>
 
@@ -139,7 +140,7 @@ export const Journal: React.FC = () => {
         <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
         <input
           type="text"
-          placeholder="Search journal entries..."
+          placeholder="搜索日记内容..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-rose-200 bg-white/80 focus:border-rose-400 text-xs outline-none shadow-xs"
@@ -168,7 +169,7 @@ export const Journal: React.FC = () => {
                     </span>
                     <span className="text-xs font-semibold text-slate-600 flex items-center space-x-1">
                       <Heart className="w-3 h-3 text-rose-500 fill-current" />
-                      <span>Written by {entry.author || 'Couple'}</span>
+                      <span>作者：{entry.author || '情侣'}</span>
                     </span>
                   </div>
 
@@ -180,14 +181,14 @@ export const Journal: React.FC = () => {
                     <button
                       onClick={() => openEditModal(entry)}
                       className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                      title="Edit Entry"
+                      title="编辑日记"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(entry.id)}
                       className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                      title="Delete Entry"
+                      title="删除日记"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -199,7 +200,7 @@ export const Journal: React.FC = () => {
                 {linkedMemory && (
                   <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-pink-50 text-pink-700 text-xs font-semibold">
                     <Sparkles className="w-3.5 h-3.5 text-rose-500" />
-                    <span>Memory Link: {linkedMemory.title} ({linkedMemory.date})</span>
+                    <span>关联回忆：{linkedMemory.title} ({linkedMemory.date})</span>
                   </div>
                 )}
 
@@ -225,8 +226,8 @@ export const Journal: React.FC = () => {
         {filteredEntries.length === 0 && (
           <div className="text-center py-16 glass-card rounded-3xl p-8 border border-rose-100 max-w-xl mx-auto">
             <Sparkles className="w-10 h-10 text-rose-400 mx-auto mb-3" />
-            <h4 className="font-serif font-bold text-lg text-slate-800">Belum ada catatan jurnal</h4>
-            <p className="text-xs text-slate-500 mt-1">Mulai tulis momen dan perasaan harianmu bersama!</p>
+            <h4 className="font-serif font-bold text-lg text-slate-800">还没有日记哦</h4>
+            <p className="text-xs text-slate-500 mt-1">开始记录你们每天的日常与感受吧！</p>
           </div>
         )}
       </div>
@@ -242,7 +243,7 @@ export const Journal: React.FC = () => {
             <div className="p-4 sm:p-5 border-b border-rose-100 flex items-center justify-between shrink-0 bg-white">
               <h3 className="font-serif font-bold text-lg sm:text-xl text-slate-800 flex items-center space-x-2">
                 <BookOpen className="w-5 h-5 text-rose-500" />
-                <span>{editingEntry ? 'Edit Catatan Jurnal' : 'Tulis Catatan Jurnal'}</span>
+                <span>{editingEntry ? '编辑日记' : '写日记'}</span>
               </h3>
               <button
                 type="button"
@@ -256,11 +257,11 @@ export const Journal: React.FC = () => {
             <form onSubmit={handleSaveEntry} className="flex flex-col overflow-hidden flex-1">
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Judul Jurnal</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">日记标题</label>
                   <input
                     type="text"
                     required
-                    placeholder="Contoh: Sore Hujan & Pancakes Matcha"
+                    placeholder="例如：下雨的午后 & 抹茶松饼"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs sm:text-sm outline-none bg-white"
@@ -269,7 +270,7 @@ export const Journal: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Penulis</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">作者</label>
                     <select
                       value={author}
                       onChange={(e) => setAuthor(e.target.value)}
@@ -281,31 +282,31 @@ export const Journal: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Mood Hari Ini</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">今天的心情</label>
                     <select
                       value={mood}
                       onChange={(e) => setMood(e.target.value as any)}
                       className="w-full px-3 py-2.5 rounded-xl border border-rose-200 text-xs sm:text-sm outline-none bg-white"
                     >
-                      <option value="joy">😊 Pure Joy</option>
-                      <option value="love">🥰 So in Love</option>
-                      <option value="cozy">☕ Cozy Day</option>
-                      <option value="missing">🥺 Missing You</option>
-                      <option value="adventure">✈️ Adventure Time</option>
-                      <option value="grateful">🙏 Truly Grateful</option>
+                      <option value="joy">😊 纯粹的快乐</option>
+                      <option value="love">🥰 沉浸在爱中</option>
+                      <option value="cozy">☕ 惬意的一天</option>
+                      <option value="missing">🥺 想你</option>
+                      <option value="adventure">✈️ 探险时光</option>
+                      <option value="grateful">🙏 真心感恩</option>
                     </select>
                   </div>
                 </div>
 
                 {memories.length > 0 && (
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Hubungkan Kenangan (Opsional)</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">关联回忆（可选）</label>
                     <select
                       value={memoryId}
                       onChange={(e) => setMemoryId(e.target.value)}
                       className="w-full px-3 py-2.5 rounded-xl border border-rose-200 text-xs sm:text-sm outline-none bg-white"
                     >
-                      <option value="">Tidak ada (Jurnal Umum)</option>
+                      <option value="">无（普通日记）</option>
                       {memories.map((m) => (
                         <option key={m.id} value={m.id}>
                           ✨ {m.title} ({m.date})
@@ -316,11 +317,11 @@ export const Journal: React.FC = () => {
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Cerita & Refleksi</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">故事与感想</label>
                   <textarea
                     rows={4}
                     required
-                    placeholder="Tuliskan momen atau perasaanmu hari ini..."
+                    placeholder="写下今天的点滴或你的感受..."
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs sm:text-sm outline-none bg-white"
@@ -329,7 +330,7 @@ export const Journal: React.FC = () => {
 
                 <MediaUploader
                   bucket="photos"
-                  label="Foto Jurnal (Opsional)"
+                  label="日记配图（可选）"
                   accept="image/*"
                   value={photoUrl}
                   onChange={setPhotoUrl}
@@ -342,14 +343,14 @@ export const Journal: React.FC = () => {
                   onClick={() => setIsModalOpen(false)}
                   className="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
                 >
-                  Batal
+                  取消
                 </button>
                 <button
                   type="submit"
                   disabled={!title || !content}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-md disabled:opacity-50 hover:scale-105 transition-all"
                 >
-                  {editingEntry ? 'Perbarui Jurnal' : 'Simpan Jurnal'}
+                  {editingEntry ? '更新日记' : '保存日记'}
                 </button>
               </div>
             </form>
