@@ -29,12 +29,12 @@ export const Countdown: React.FC = () => {
 
   // Milestone targets
   const milestones = [
-    { targetDays: 100, label: '100 Days Together' },
-    { targetDays: 365, label: '1 Year Anniversary' },
-    { targetDays: 500, label: '500 Days Together' },
-    { targetDays: 730, label: '2 Years Anniversary' },
-    { targetDays: 1000, label: '1,000 Days Together' },
-    { targetDays: 1825, label: '5 Years Golden Anniversary' }
+    { targetDays: 100, label: '相恋 100 天' },
+    { targetDays: 365, label: '一周年纪念日' },
+    { targetDays: 500, label: '相恋 500 天' },
+    { targetDays: 730, label: '两周年纪念日' },
+    { targetDays: 1000, label: '相恋 1000 天' },
+    { targetDays: 1825, label: '五周年纪念日' }
   ];
 
   return (
@@ -45,13 +45,13 @@ export const Countdown: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold mb-2">
             <Clock className="w-3.5 h-3.5" />
-            <span>Time Ticker</span>
+            <span>倒计时</span>
           </div>
           <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-slate-800">
-            Anniversary Countdown
+            恋爱倒计时
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Counting every single second since our hearts intertwined.
+            细数两颗心交织以来的每一秒。
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export const Countdown: React.FC = () => {
           className="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-lg shadow-rose-200 hover:scale-105 transition-all"
         >
           <Sparkles className="w-4 h-4 animate-spin" />
-          <span>Celebrate Our Love 🎉</span>
+          <span>庆祝我们的爱 🎉</span>
         </button>
       </div>
 
@@ -70,14 +70,14 @@ export const Countdown: React.FC = () => {
         <div className="space-y-2">
           <span className="text-xs font-bold uppercase tracking-widest text-rose-500 flex items-center justify-center space-x-1">
             <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-            <span>Since {settings.relationship_start_date}</span>
+            <span>始于 {settings.relationship_start_date}</span>
             <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
           </span>
           <h2 className="font-serif font-extrabold text-3xl sm:text-5xl text-slate-800">
             {settings.partner1_name} & {settings.partner2_name}
           </h2>
           <p className="text-sm font-medium text-slate-600">
-            Total {daysTogether.toLocaleString()} Days in Our Shared Universe
+            在属于我们的宇宙里共度了 {daysTogether.toLocaleString()} 天
           </p>
         </div>
 
@@ -85,32 +85,32 @@ export const Countdown: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
           <motion.div whileHover={{ scale: 1.05 }} className="bg-white/90 p-4 rounded-2xl shadow-sm border border-rose-100">
             <span className="block font-serif font-extrabold text-3xl sm:text-4xl text-rose-600">{timeTogether.years}</span>
-            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">Years</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">年</span>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.05 }} className="bg-white/90 p-4 rounded-2xl shadow-sm border border-rose-100">
             <span className="block font-serif font-extrabold text-3xl sm:text-4xl text-rose-600">{timeTogether.months}</span>
-            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">Months</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">月</span>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.05 }} className="bg-white/90 p-4 rounded-2xl shadow-sm border border-rose-100">
             <span className="block font-serif font-extrabold text-3xl sm:text-4xl text-rose-600">{timeTogether.days}</span>
-            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">Days</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">天</span>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.05 }} className="bg-white/90 p-4 rounded-2xl shadow-sm border border-rose-100">
             <span className="block font-serif font-extrabold text-3xl sm:text-4xl text-rose-600">{timeTogether.hours}</span>
-            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">Hours</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">时</span>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.05 }} className="bg-white/90 p-4 rounded-2xl shadow-sm border border-rose-100">
             <span className="block font-serif font-extrabold text-3xl sm:text-4xl text-rose-600">{timeTogether.minutes}</span>
-            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">Mins</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">分</span>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.05 }} className="bg-white/90 p-4 rounded-2xl shadow-sm border border-rose-100">
             <span className="block font-serif font-extrabold text-3xl sm:text-4xl text-rose-600">{timeTogether.seconds}</span>
-            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">Secs</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase mt-1 block">秒</span>
           </motion.div>
         </div>
 
@@ -128,7 +128,7 @@ export const Countdown: React.FC = () => {
                 onClick={handleSaveDate}
                 className="px-3 py-1.5 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-sm hover:bg-rose-600"
               >
-                Save
+                保存
               </button>
             </div>
           ) : (
@@ -136,7 +136,7 @@ export const Countdown: React.FC = () => {
               onClick={() => setIsEditingDate(true)}
               className="text-xs text-rose-500 font-semibold underline hover:text-rose-700"
             >
-              Change Relationship Start Date
+              修改相恋开始日期
             </button>
           )}
         </div>
@@ -147,7 +147,7 @@ export const Countdown: React.FC = () => {
       <div className="glass-card rounded-3xl p-6 sm:p-8 border border-rose-100 space-y-6">
         <h3 className="font-serif font-bold text-xl text-slate-800 flex items-center space-x-2">
           <Trophy className="w-5 h-5 text-amber-500" />
-          <span>Love Milestones Tracker</span>
+          <span>恋爱里程碑追踪</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -170,7 +170,7 @@ export const Countdown: React.FC = () => {
                   {isPassed ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                   ) : (
-                    <span className="text-[10px] font-bold text-rose-500 uppercase">{remaining} days left</span>
+                    <span className="text-[10px] font-bold text-rose-500 uppercase">还剩 {remaining} 天</span>
                   )}
                 </div>
 
@@ -182,7 +182,7 @@ export const Countdown: React.FC = () => {
                 </div>
 
                 <p className="text-[11px] text-slate-400">
-                  {isPassed ? 'Achieved & Celebrated 💕' : `${progress}% completed`}
+                  {isPassed ? '已达成并庆祝 💕' : `已完成 ${progress}%`}
                 </p>
               </div>
             );
