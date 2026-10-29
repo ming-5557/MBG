@@ -84,7 +84,7 @@ export const MusicPage: React.FC = () => {
       await updateSong({
         ...editingSong,
         title,
-        artist: artist || 'Various Artists',
+        artist: artist || '未知歌手',
         cover_url: coverUrl || 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&q=80&w=400',
         music_url: musicUrl,
         dedication
@@ -92,7 +92,7 @@ export const MusicPage: React.FC = () => {
     } else {
       await addSong({
         title,
-        artist: artist || 'Various Artists',
+        artist: artist || '未知歌手',
         cover_url: coverUrl || 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&q=80&w=400',
         music_url: musicUrl,
         dedication
@@ -115,13 +115,13 @@ export const MusicPage: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold mb-2">
             <MusicIcon className="w-3.5 h-3.5" />
-            <span>Romantic Soundtrack</span>
+            <span>浪漫音乐</span>
           </div>
           <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-slate-800">
-            Music Corner
+            音乐角
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Our shared soundtrack, slow dance songs, and sweet lullabies.
+            我们的共享歌单、浪漫舞曲和甜蜜的摇篮曲。
           </p>
         </div>
 
@@ -130,7 +130,7 @@ export const MusicPage: React.FC = () => {
           className="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-lg shadow-rose-200 hover:scale-105 transition-all"
         >
           <Plus className="w-4 h-4" />
-          <span>Upload Track (MP3)</span>
+          <span>上传歌曲 (MP3)</span>
         </button>
       </div>
 
@@ -171,7 +171,7 @@ export const MusicPage: React.FC = () => {
                 <div>
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-rose-500 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 animate-spin" />
-                    Now Playing
+                    正在播放
                   </span>
                   <h2 className="font-serif font-bold text-2xl sm:text-3xl text-slate-800 mt-1">
                     {currentSong.title}
@@ -229,7 +229,7 @@ export const MusicPage: React.FC = () => {
                   <button
                     onClick={playPrev}
                     className="p-3 rounded-full hover:bg-rose-100/60 text-slate-600 hover:text-rose-600 transition-colors"
-                    title="Previous Song"
+                    title="上一首"
                   >
                     <SkipBack className="w-6 h-6" />
                   </button>
@@ -237,7 +237,7 @@ export const MusicPage: React.FC = () => {
                   <button
                     onClick={togglePlay}
                     className="w-14 h-14 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white flex items-center justify-center shadow-lg shadow-rose-300 hover:scale-105 transition-all"
-                    title={isPlaying ? 'Pause' : 'Play'}
+                    title={isPlaying ? '暂停' : '播放'}
                   >
                     {isPlaying ? <Pause className="w-7 h-7" /> : <Play className="w-7 h-7 ml-0.5" />}
                   </button>
@@ -245,7 +245,7 @@ export const MusicPage: React.FC = () => {
                   <button
                     onClick={playNext}
                     className="p-3 rounded-full hover:bg-rose-100/60 text-slate-600 hover:text-rose-600 transition-colors"
-                    title="Next Song"
+                    title="下一首"
                   >
                     <SkipForward className="w-6 h-6" />
                   </button>
@@ -276,7 +276,7 @@ export const MusicPage: React.FC = () => {
         </div>
       ) : (
         <div className="glass-card p-8 rounded-3xl text-center border border-rose-100">
-          <p className="text-slate-500">No song selected</p>
+          <p className="text-slate-500">尚未选择歌曲</p>
         </div>
       )}
 
@@ -284,7 +284,7 @@ export const MusicPage: React.FC = () => {
       <div className="glass-card rounded-3xl p-6 border border-rose-100 space-y-4">
         <h3 className="font-serif font-bold text-lg text-slate-800 flex items-center space-x-2">
           <Sparkles className="w-5 h-5 text-rose-500" />
-          <span>Our Playlist ({songs.length} Tracks)</span>
+          <span>我们的歌单 (共 {songs.length} 首)</span>
         </h3>
 
         <div className="divide-y divide-rose-100">
@@ -326,14 +326,14 @@ export const MusicPage: React.FC = () => {
                   <button
                     onClick={(e) => openEditModal(song, e)}
                     className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100"
-                    title="Edit Song"
+                    title="编辑歌曲"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={(e) => handleDeleteSong(song.id, e)}
                     className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100"
-                    title="Delete Song"
+                    title="删除歌曲"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -358,7 +358,7 @@ export const MusicPage: React.FC = () => {
             <div className="p-4 sm:p-5 border-b border-rose-100 flex items-center justify-between shrink-0 bg-white">
               <h3 className="font-serif font-bold text-lg sm:text-xl text-slate-800 flex items-center space-x-2">
                 <MusicIcon className="w-5 h-5 text-rose-500" />
-                <span>{editingSong ? 'Edit Music Track' : 'Add Track to Music Corner'}</span>
+                <span>{editingSong ? '编辑歌曲' : '添加歌曲到音乐角落'}</span>
               </h3>
               <button
                 type="button"
@@ -372,11 +372,11 @@ export const MusicPage: React.FC = () => {
             <form onSubmit={handleSaveSong} className="flex flex-col overflow-hidden flex-1">
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Song Title</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">歌曲名称</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Golden Hour Serenade"
+                    placeholder="例如：金色时光小夜曲"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs sm:text-sm outline-none bg-white"
@@ -384,10 +384,10 @@ export const MusicPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Artist Name</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">歌手名称</label>
                   <input
                     type="text"
-                    placeholder="e.g. Acoustic Love Strings"
+                    placeholder="例如：木吉他情歌"
                     value={artist}
                     onChange={(e) => setArtist(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs sm:text-sm outline-none bg-white"
@@ -395,10 +395,10 @@ export const MusicPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Dedication Note</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">专属留言 / 赠言</label>
                   <input
                     type="text"
-                    placeholder="e.g. Our sunset song from Santorini beach trip"
+                    placeholder="例如：我们在海滩看日落时的歌"
                     value={dedication}
                     onChange={(e) => setDedication(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs sm:text-sm outline-none bg-white"
@@ -407,14 +407,14 @@ export const MusicPage: React.FC = () => {
 
                 <MediaUploader
                   bucket="music"
-                  label="Upload Audio File MP3 (Music Bucket)"
+                  label="上传音频文件 MP3"
                   accept="audio/*"
                   onUploadSuccess={(url) => setMusicUrl(url)}
                 />
 
                 <MediaUploader
                   bucket="photos"
-                  label="Optional Cover Image (Photos Bucket)"
+                  label="上传封面图（可选）"
                   accept="image/*"
                   onUploadSuccess={(url) => setCoverUrl(url)}
                 />
@@ -426,14 +426,14 @@ export const MusicPage: React.FC = () => {
                   onClick={() => setIsModalOpen(false)}
                   className="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
                 >
-                  Cancel
+                  取消
                 </button>
                 <button
                   type="submit"
                   disabled={!musicUrl || !title}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-md disabled:opacity-50 hover:scale-105 transition-all"
                 >
-                  {editingSong ? 'Update Track' : 'Save Track'}
+                  {editingSong ? '更新歌曲' : '保存歌曲'}
                 </button>
               </div>
             </form>
@@ -442,4 +442,4 @@ export const MusicPage: React.FC = () => {
       )}
     </div>
   );
-};
+};  
