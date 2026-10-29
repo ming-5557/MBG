@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
     { path: '/music', label: '音乐', icon: Music },
     { path: '/notes', label: '小纸条', icon: FileText },
     { path: '/journal', label: '日记', icon: BookOpen },
-    { path: '/countdown', label: '倒计时', icon: Clock },
+    { path: '/countdown', label: '时间沙漏', icon: Clock },
     { path: '/letter', label: '情书', icon: Mail },
     { path: '/favorites', label: '收藏', icon: Star },
     { path: '/settings', label: '设置', icon: SettingsIcon }
