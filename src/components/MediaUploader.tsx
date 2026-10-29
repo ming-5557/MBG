@@ -18,7 +18,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
   onUploadSuccess,
   onChange,
   value = '',
-  label = 'Unggah Foto / Media',
+  label = '照片 / 媒体',
   type = 'image'
 }) => {
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
