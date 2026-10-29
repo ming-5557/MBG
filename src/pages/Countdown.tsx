@@ -45,10 +45,10 @@ export const Countdown: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold mb-2">
             <Clock className="w-3.5 h-3.5" />
-            <span>倒计时</span>
+            <span>时间沙漏</span>
           </div>
           <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-slate-800">
-            恋爱倒计时
+            恋爱时间
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
             细数两颗心交织以来的每一秒。
