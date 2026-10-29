@@ -177,7 +177,7 @@ export const Landing: React.FC = () => {
           </div>
 
           <div className="text-center text-[10px] font-sans font-bold uppercase tracking-widest text-[#DB2777]">
-            Every second is a sweet gift 💕
+            每一秒都是一份甜蜜的礼物 💕
           </div>
         </div>
 
