@@ -112,13 +112,13 @@ export const Notes: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-xs font-semibold mb-2">
             <FileText className="w-3.5 h-3.5" />
-            <span>Heartfelt Whispers</span>
+            <span>心动耳语</span>
           </div>
           <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-slate-800">
-            Love Notes Wall
+            甜蜜小纸条
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Sticky sweet notes, morning greetings, and quiet words sent to each other.
+            写满悄悄话的便利贴、早安问候与互相传达的温柔话语。
           </p>
         </div>
 
@@ -127,7 +127,7 @@ export const Notes: React.FC = () => {
           className="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-lg shadow-rose-200 hover:scale-105 transition-all"
         >
           <Plus className="w-4 h-4" />
-          <span>Write Love Note</span>
+          <span>写小纸条</span>
         </button>
       </div>
 
@@ -159,11 +159,11 @@ export const Notes: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 text-xs font-bold text-slate-700">
                       <span className="px-2.5 py-1 rounded-full bg-white/80 shadow-xs border border-rose-100">
-                        From: {note.sender}
+                        来自: {note.sender}
                       </span>
                       <Heart className="w-3 h-3 text-rose-500 fill-current" />
                       <span className="px-2.5 py-1 rounded-full bg-white/80 shadow-xs border border-rose-100">
-                        To: {note.receiver}
+                        送给: {note.receiver}
                       </span>
                     </div>
 
@@ -173,21 +173,21 @@ export const Notes: React.FC = () => {
                         className={`p-1.5 rounded-xl transition-colors ${
                           note.is_pinned ? 'text-rose-600 bg-rose-100' : 'text-slate-400 hover:text-rose-600'
                         }`}
-                        title={note.is_pinned ? 'Unpin' : 'Pin to top'}
+                        title={note.is_pinned ? '取消置顶' : '置顶'}
                       >
                         <Pin className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => openEditModal(note)}
                         className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-white/60"
-                        title="Edit Note"
+                        title="编辑纸条"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => handleDelete(note.id)}
                         className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-white/60"
-                        title="Delete Note"
+                        title="删除纸条"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -203,7 +203,7 @@ export const Notes: React.FC = () => {
                   {linkedMemory && (
                     <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white/80 border border-rose-200 text-slate-700 text-[11px] font-semibold">
                       <Sparkles className="w-3 h-3 text-rose-500" />
-                      <span>Linked Memory: {linkedMemory.title}</span>
+                      <span>关联回忆: {linkedMemory.title}</span>
                     </div>
                   )}
 
@@ -224,7 +224,7 @@ export const Notes: React.FC = () => {
                   <span>{new Date(note.created_at).toLocaleDateString()}</span>
                   <span className="flex items-center space-x-1 text-rose-500 font-medium">
                     <Sparkles className="w-3 h-3" />
-                    <span>Sent with love</span>
+                    <span>满怀爱意发送</span>
                   </span>
                 </div>
               </motion.div>
@@ -236,8 +236,8 @@ export const Notes: React.FC = () => {
       {notes.length === 0 && (
         <div className="text-center py-16 glass-card rounded-3xl p-8 border border-rose-100 max-w-xl mx-auto">
           <Sparkles className="w-10 h-10 text-rose-400 mx-auto mb-3" />
-          <h4 className="font-serif font-bold text-lg text-slate-800">No love notes on the wall yet</h4>
-          <p className="text-xs text-slate-500 mt-1">Leave a sweet message for your partner to make their day!</p>
+          <h4 className="font-serif font-bold text-lg text-slate-800">墙上还没有小纸条哦</h4>
+          <p className="text-xs text-slate-500 mt-1">给你的伴侣留句甜言蜜语，让TA开心一整天吧！</p>
         </div>
       )}
 
@@ -252,7 +252,7 @@ export const Notes: React.FC = () => {
             <div className="p-4 sm:p-5 border-b border-rose-100 flex items-center justify-between shrink-0 bg-white">
               <h3 className="font-serif font-bold text-lg sm:text-xl text-slate-800 flex items-center space-x-2">
                 <Send className="w-5 h-5 text-rose-500" />
-                <span>{editingNote ? 'Edit Love Note' : 'Write a Love Note'}</span>
+                <span>{editingNote ? '编辑小纸条' : '写小纸条'}</span>
               </h3>
               <button
                 type="button"
@@ -267,7 +267,7 @@ export const Notes: React.FC = () => {
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Sender</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">发送者 (From)</label>
                     <select
                       value={sender}
                       onChange={(e) => setSender(e.target.value)}
@@ -278,7 +278,7 @@ export const Notes: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Receiver</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">接收者 (To)</label>
                     <select
                       value={receiver}
                       onChange={(e) => setReceiver(e.target.value)}
@@ -291,7 +291,7 @@ export const Notes: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Card Theme Color</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">卡片主题色</label>
                   <div className="flex items-center space-x-3 pt-1">
                     {(['rose', 'blush', 'lavender', 'mint', 'gold'] as const).map((t) => (
                       <button
@@ -316,13 +316,13 @@ export const Notes: React.FC = () => {
 
                 {memories.length > 0 && (
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Link to Memory (Optional)</label>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">关联回忆（可选）</label>
                     <select
                       value={memoryId}
                       onChange={(e) => setMemoryId(e.target.value)}
                       className="w-full px-3 py-2.5 rounded-xl border border-rose-200 text-xs sm:text-sm outline-none bg-white"
                     >
-                      <option value="">None (General Note)</option>
+                      <option value="">无（普通纸条）</option>
                       {memories.map((m) => (
                         <option key={m.id} value={m.id}>
                           ✨ {m.title} ({m.date})
@@ -333,11 +333,11 @@ export const Notes: React.FC = () => {
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Your Message</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">你的留言</label>
                   <textarea
                     rows={4}
                     required
-                    placeholder="Write something sweet and romantic..."
+                    placeholder="写点甜蜜浪漫的话吧..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs sm:text-sm outline-none bg-white"
@@ -346,7 +346,7 @@ export const Notes: React.FC = () => {
 
                 <MediaUploader
                   bucket="notes-attachments"
-                  label="Optional Attachment (Notes Attachment Bucket)"
+                  label="上传图片附件（可选）"
                   accept="image/*"
                   onUploadSuccess={(url) => setAttachmentUrl(url)}
                 />
@@ -364,7 +364,7 @@ export const Notes: React.FC = () => {
                   onClick={() => setIsModalOpen(false)}
                   className="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
                 >
-                  Cancel
+                  取消
                 </button>
                 <button
                   type="submit"
@@ -372,7 +372,7 @@ export const Notes: React.FC = () => {
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-md disabled:opacity-50 hover:scale-105 transition-all flex items-center space-x-1"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{editingNote ? 'Update Note' : 'Send Note'}</span>
+                  <span>{editingNote ? '更新纸条' : '发送纸条'}</span>
                 </button>
               </div>
             </form>
