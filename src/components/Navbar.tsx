@@ -19,20 +19,19 @@ import { useCouple } from '../context/CoupleContext';
 export const Navbar: React.FC = () => {
   const { settings, daysTogether } = useCouple();
   const location = useLocation();
-
   const navItems = [
-    { path: '/', label: 'Home', icon: Heart },
-    { path: '/calendar', label: 'Calendar', icon: Calendar },
-    { path: '/timeline', label: 'Timeline', icon: Sparkles },
-    { path: '/gallery', label: 'Gallery', icon: Image },
-    { path: '/videos', label: 'Videos', icon: Video },
-    { path: '/music', label: 'Music', icon: Music },
-    { path: '/notes', label: 'Love Notes', icon: FileText },
-    { path: '/journal', label: 'Journal', icon: BookOpen },
-    { path: '/countdown', label: 'Countdown', icon: Clock },
-    { path: '/letter', label: 'Love Letter', icon: Mail },
-    { path: '/favorites', label: 'Favorites', icon: Star },
-    { path: '/settings', label: 'Settings', icon: SettingsIcon }
+    { path: '/', label: '首页', icon: Heart },
+    { path: '/calendar', label: '日历', icon: Calendar },
+    { path: '/timeline', label: '时光轴', icon: Sparkles },
+    { path: '/gallery', label: '相册', icon: Image },
+    { path: '/videos', label: '视频', icon: Video },
+    { path: '/music', label: '音乐', icon: Music },
+    { path: '/notes', label: '小纸条', icon: FileText },
+    { path: '/journal', label: '日记', icon: BookOpen },
+    { path: '/countdown', label: '倒计时', icon: Clock },
+    { path: '/letter', label: '情书', icon: Mail },
+    { path: '/favorites', label: '收藏', icon: Star },
+    { path: '/settings', label: '设置', icon: SettingsIcon }
   ];
 
   return (
@@ -53,8 +52,9 @@ export const Navbar: React.FC = () => {
                 <span className="font-serif font-bold italic text-xl text-[#DB2777] tracking-tight">
                   {settings.hero_title || 'sabrianisa'}
                 </span>
+                {/* 👇这里把 Days Together 改成了 天 */}
                 <p className="text-[10px] text-[#DB2777] font-sans font-bold tracking-[0.18em] uppercase opacity-75 hidden sm:block">
-                  {settings.partner1_name} & {settings.partner2_name} • {daysTogether} Days Together
+                  {settings.partner1_name} & {settings.partner2_name} • 在一起 {daysTogether} 天
                 </p>
               </div>
             </NavLink>
@@ -87,7 +87,7 @@ export const Navbar: React.FC = () => {
               <NavLink
                 to="/letter"
                 className="p-2.5 rounded-2xl bg-gradient-to-tr from-pink-100 to-pink-50 border border-pink-200/80 shadow-xs flex items-center space-x-1.5 active:scale-95 transition-all text-[#DB2777]"
-                title="Love Letter"
+                title="情书"
               >
                 <Heart className="w-5 h-5 fill-[#DB2777] text-[#DB2777] animate-pulse" />
               </NavLink>
