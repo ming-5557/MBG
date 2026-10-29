@@ -29,13 +29,13 @@ export const Settings: React.FC = () => {
       <div>
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold mb-2">
           <SettingsIcon className="w-3.5 h-3.5" />
-          <span>Universe Settings</span>
+          <span>设置</span>
         </div>
         <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-slate-800">
-          Settings & Configuration
+          设置与配置
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Customize couple names, relationship dates, background photo, and title settings.
+          自定义情侣昵称、纪念日、背景照片以及标题设置。
         </p>
       </div>
 
@@ -44,12 +44,12 @@ export const Settings: React.FC = () => {
         
         <h3 className="font-serif font-bold text-xl text-slate-800 border-b border-rose-100 pb-3 flex items-center space-x-2">
           <Heart className="w-5 h-5 text-rose-500" />
-          <span>Couple Identity & Profile</span>
+          <span>情侣身份与档案</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Partner 1 Name</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">伴侣 1 昵称</label>
             <input
               type="text"
               required
@@ -60,7 +60,7 @@ export const Settings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Partner 2 Name</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">伴侣 2 昵称</label>
             <input
               type="text"
               required
@@ -74,20 +74,20 @@ export const Settings: React.FC = () => {
         {/* Avatars & Card Background Cover Photo */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
           <div className="space-y-2">
-            <label className="block text-xs font-semibold text-slate-700">Partner 1 Avatar</label>
+            <label className="block text-xs font-semibold text-slate-700">伴侣 1 头像</label>
             <MediaUploader
               bucket="photos"
-              label="Upload Partner 1 Avatar"
+              label="上传伴侣 1 头像"
               accept="image/*"
               onUploadSuccess={(url) => setFormState({ ...formState, partner1_avatar: url })}
             />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-semibold text-slate-700">Partner 2 Avatar</label>
+            <label className="block text-xs font-semibold text-slate-700">伴侣 2 头像</label>
             <MediaUploader
               bucket="photos"
-              label="Upload Partner 2 Avatar"
+              label="上传伴侣 2 头像"
               accept="image/*"
               onUploadSuccess={(url) => setFormState({ ...formState, partner2_avatar: url })}
             />
@@ -99,7 +99,7 @@ export const Settings: React.FC = () => {
           <div className="flex items-center justify-between">
             <label className="block text-xs font-bold text-slate-800 flex items-center space-x-1.5">
               <Image className="w-4 h-4 text-rose-500" />
-              <span>Foto Background / Sampul Belakang Card Polaroid</span>
+              <span>背景照片</span>
             </label>
             {formState.cover_photo && (
               <button
@@ -107,25 +107,25 @@ export const Settings: React.FC = () => {
                 onClick={() => setFormState({ ...formState, cover_photo: '' })}
                 className="text-[11px] font-semibold text-rose-500 hover:text-rose-700 hover:underline transition-colors"
               >
-                Hapus Foto Background
+                删除背景照片
               </button>
             )}
           </div>
 
           <p className="text-xs text-slate-500">
-            Foto ini akan ditampilkan sebagai latar belakang/background di dalam card polaroid di halaman utama (Landing).
+            这张照片将作为首页卡片的背景图进行展示。
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
             <div className="sm:col-span-2 space-y-3">
               <MediaUploader
                 bucket="photos"
-                label="Unggah Foto Background Belakang"
+                label="上传背景照片"
                 accept="image/*"
                 onUploadSuccess={(url) => setFormState({ ...formState, cover_photo: url })}
               />
               <div className="space-y-1">
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Atau Masukkan URL Gambar:</span>
+                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">或者输入图片链接 (URL)：</span>
                 <input
                   type="url"
                   placeholder="https://images.unsplash.com/..."
@@ -138,7 +138,7 @@ export const Settings: React.FC = () => {
 
             {/* Preview Box */}
             <div className="bg-rose-50/50 p-3 rounded-2xl border border-rose-100 flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">Preview Background</span>
+              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">背景预览</span>
               {formState.cover_photo ? (
                 <div className="relative w-full h-32 rounded-xl overflow-hidden shadow-sm border border-rose-200 group">
                   <img
@@ -152,14 +152,14 @@ export const Settings: React.FC = () => {
                       onClick={() => setFormState({ ...formState, cover_photo: '' })}
                       className="px-3 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold shadow-md hover:bg-rose-700"
                     >
-                      Hapus
+                      删除
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="w-full h-32 rounded-xl border-2 border-dashed border-rose-200 flex flex-col items-center justify-center text-rose-300 p-2">
                   <Image className="w-8 h-8 mb-1" />
-                  <span className="text-[10px] text-slate-400">Belum ada foto background</span>
+                  <span className="text-[10px] text-slate-400">暂无背景照片</span>
                 </div>
               )}
             </div>
@@ -169,7 +169,7 @@ export const Settings: React.FC = () => {
         {/* Relationship Date & Title */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Relationship Start Date</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">恋爱纪念日 / 开始日期</label>
             <input
               type="date"
               required
@@ -180,23 +180,23 @@ export const Settings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Animated Floating Particles</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">动态漂浮粒子特效</label>
             <select
               value={formState.particle_type}
               onChange={(e) => setFormState({ ...formState, particle_type: e.target.value as any })}
               className="w-full px-4 py-2.5 rounded-xl border border-rose-200 text-xs sm:text-sm outline-none bg-white"
             >
-              <option value="hearts">💖 Floating Hearts</option>
-              <option value="sakura">🌸 Sakura Petals</option>
-              <option value="stars">✨ Glowing Stars</option>
-              <option value="sparkles">💫 Sparkles</option>
-              <option value="bubbles">🫧 Romantic Bubbles</option>
+              <option value="hearts">💖 漂浮爱心</option>
+              <option value="sakura">🌸 樱花花瓣</option>
+              <option value="stars">✨ 闪耀星星</option>
+              <option value="sparkles">💫 闪烁光芒</option>
+              <option value="bubbles">🫧 浪漫气泡</option>
             </select>
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Hero Title</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">首页主标题</label>
           <input
             type="text"
             value={formState.hero_title}
@@ -206,7 +206,7 @@ export const Settings: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Hero Subtitle</label>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">首页副标题</label>
           <textarea
             rows={2}
             value={formState.hero_subtitle}
@@ -219,7 +219,7 @@ export const Settings: React.FC = () => {
           {savedSuccess && (
             <span className="text-xs font-bold text-emerald-600 flex items-center space-x-1">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Settings updated successfully!</span>
+              <span>设置保存成功！</span>
             </span>
           )}
           <button
@@ -227,7 +227,7 @@ export const Settings: React.FC = () => {
             className="ml-auto px-8 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-lg shadow-rose-200 hover:scale-105 transition-all flex items-center space-x-2"
           >
             <Save className="w-4 h-4" />
-            <span>Save Settings</span>
+            <span>保存设置</span>
           </button>
         </div>
       </form>
