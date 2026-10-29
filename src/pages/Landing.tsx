@@ -39,11 +39,11 @@ export const Landing: React.FC = () => {
           </span>
           
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-light text-[#4A3B3E] leading-tight font-serif">
-            You are the <span className="italic font-normal text-[#DB2777]">stars</span> in my little sky.
+            You are the <span className="italic font-normal text-[#DB2777]">moonlight</span> in my heart.
           </h1>
 
           <p className="text-xs sm:text-sm text-[#4A3B3E] opacity-80 leading-relaxed font-sans max-w-lg">
-            {settings.hero_subtitle || 'Counting every heartbeat, memory, and shared laughter in our quiet universe.'}
+            {settings.hero_subtitle || '在属于我们的静谧宇宙里，细数每一次心跳、回忆与欢笑。'}
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
