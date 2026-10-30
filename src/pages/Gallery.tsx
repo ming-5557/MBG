@@ -75,8 +75,10 @@ export const Gallery: React.FC = () => {
 
   const handleDeletePhoto = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    await dataService.deleteMemory(id);
-    await loadData();
+    if (window.confirm('确定要删除这张照片吗？')) {
+      await dataService.deleteMemory(id);
+      await loadData();
+    }
   };
 
   const albums = [
