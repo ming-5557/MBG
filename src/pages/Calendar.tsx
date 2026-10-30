@@ -95,7 +95,7 @@ export const CalendarPage: React.FC = () => {
   };
 
   // Combine all items into event list
-  const allEvents: CalendarEvent[] = [
+  const allEvents: (CalendarEvent & { sortTime: number })[] = [
     ...memories.map((m) => ({
       id: m.id,
       type: 'memory' as const,
@@ -106,7 +106,8 @@ export const CalendarPage: React.FC = () => {
       video_url: m.video_url,
       categoryOrMood: m.category || 'daily',
       authorOrSender: m.location,
-      raw: m
+      raw: m,
+      sortTime: new Date((m as any).created_at || m.date).getTime()
     })),
     ...journalEntries.map((j) => ({
       id: j.id,
@@ -118,7 +119,8 @@ export const CalendarPage: React.FC = () => {
       video_url: j.video_url,
       categoryOrMood: j.mood || 'love',
       authorOrSender: j.author || 'Love',
-      raw: j
+      raw: j,
+      sortTime: new Date(j.created_at).getTime()
     })),
     ...notes.map((n) => ({
       id: n.id,
@@ -128,9 +130,10 @@ export const CalendarPage: React.FC = () => {
       description: n.message,
       photo_url: n.attachment_url,
       authorOrSender: `${n.sender} → ${n.receiver}`,
-      raw: n
+      raw: n,
+      sortTime: new Date(n.created_at).getTime()
     }))
-  ];
+  ].sort((a, b) => b.sortTime - a.sortTime); 
 
   // Calendar logic
   const year = currentDate.getFullYear();
