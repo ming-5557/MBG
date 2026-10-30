@@ -246,7 +246,11 @@ export const CalendarPage: React.FC = () => {
   };
 
   // Handle deleting item
+  // Handle deleting item
   const handleDeleteEvent = async (event: CalendarEvent) => {
+    // 👇 加入确认提示
+    if (!window.confirm('确定要删除这条记录吗？删除后将无法恢复哦！')) return;
+
     if (event.type === 'memory') {
       await dataService.deleteMemory(event.id);
     } else if (event.type === 'journal') {
@@ -254,7 +258,7 @@ export const CalendarPage: React.FC = () => {
     } else if (event.type === 'note') {
       await dataService.deleteNote(event.id);
     }
-    await loadAllData();
+    await loadData();
   };
 
   const getEventBadgeClass = (type: CalendarEvent['type']) => {
