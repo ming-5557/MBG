@@ -105,8 +105,11 @@ export const Timeline: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    await dataService.deleteMemory(id);
-    await loadData();
+    // 👇 加入这行确认提示
+    if (window.confirm('确定要删除这条回忆吗？删除后将无法恢复哦！')) {
+      await dataService.deleteMemory(id);
+      await loadData();
+      }
   };
 
   const filteredMemories = memories.filter((m) => {
