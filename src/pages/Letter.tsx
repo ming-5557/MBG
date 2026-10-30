@@ -338,7 +338,7 @@ export const Letter: React.FC = () => {
                     </div>
 
                     {/* Handwritten Content Lines */}
-                    <div className="font-caveat text-xl sm:text-2xl text-[#3D2C30] leading-[2.5rem] whitespace-pre-line min-h-[160px] pt-1">
+                    <div className="font-caveat text-xl sm:text-2xl text-[#3D2C30] leading-[2.5rem] whitespace-pre-wrap indent-[2em] min-h-[160px] pt-1">
                       {currentLetter.content}
                     </div>
 
@@ -477,8 +477,7 @@ export const Letter: React.FC = () => {
                     placeholder="在这里写下你最真挚、最深情的告白..."
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    className="w-full p-4 rounded-xl border border-pink-200 focus:border-pink-400 text-lg sm:text-xl font-caveat text-slate-800 outline-none leading-relaxed bg-pink-50/20"
-                  />
+                    className="w-full p-4 rounded-xl border border-pink-200 focus:border-pink-400 text-lg sm:text-xl font-caveat text-slate-800 outline-none leading-relaxed bg-pink-50/20 indent-[2em]"
                 </div>
 
               </div>
