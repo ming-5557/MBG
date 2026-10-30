@@ -104,7 +104,9 @@ export const MusicPage: React.FC = () => {
 
   const handleDeleteSong = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    await deleteSong(id);
+    if (window.confirm('确定要删除这首歌吗？')) {
+      await deleteSong(id);
+    }
   };
 
   return (
