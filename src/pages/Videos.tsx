@@ -74,8 +74,10 @@ export const Videos: React.FC = () => {
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    await dataService.deleteMemory(id);
-    await loadData();
+    if (window.confirm('确定要删除这段视频吗？')) {
+      await dataService.deleteMemory(id);
+      await loadData();
+    }
   };
 
   return (
