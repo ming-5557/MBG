@@ -85,8 +85,10 @@ export const Favorites: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    await dataService.deleteFavorite(id);
-    await loadData();
+    if (window.confirm('确定要将这件物品移出收藏夹吗？')) {
+      await dataService.deleteFavorite(id);
+      await loadData();
+    }
   };
 
   const categories = [
