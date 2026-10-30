@@ -92,8 +92,10 @@ export const Notes: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    await dataService.deleteNote(id);
-    await loadData();
+    if (window.confirm('确定要撕掉这张小纸条吗？')) {
+      await dataService.deleteNote(id);
+      await loadData();
+    }
   };
 
   const themeStyles = {
