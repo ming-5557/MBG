@@ -87,8 +87,10 @@ export const Journal: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    await dataService.deleteJournalEntry(id);
-    await loadData();
+    if (window.confirm('确定要删除这篇日记吗？')) {
+      await dataService.deleteJournalEntry(id);
+      await loadData();
+    }
   };
 
   // 👇 心情标签的中文化
