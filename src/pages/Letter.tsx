@@ -478,6 +478,7 @@ export const Letter: React.FC = () => {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     className="w-full p-4 rounded-xl border border-pink-200 focus:border-pink-400 text-lg sm:text-xl font-caveat text-slate-800 outline-none leading-relaxed bg-pink-50/20 indent-[2em]"
+                     /> 
                 </div>
 
               </div>
