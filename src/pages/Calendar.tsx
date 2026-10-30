@@ -1,3 +1,4 @@
+tsx
 import React, { useState, useEffect } from 'react';
 import {
   ChevronLeft,
@@ -7,7 +8,6 @@ import {
   BookOpen,
   FileText,
   Trophy,
-  Trash2,
   X,
   Sparkles,
   MapPin,
@@ -147,7 +147,6 @@ export const CalendarPage: React.FC = () => {
     setCurrentDate(new Date(year, month + 1, 1));
   };
 
-  // 👇 修改为了中文的星期显示
   const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
 
   // Map events by date
@@ -166,11 +165,10 @@ export const CalendarPage: React.FC = () => {
   });
 
   // Calculate Calendar 42 Grid Cells
-  const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 = Sun
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
   const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-  // Prev Month Days
   const prevMonthDays = [];
   for (let i = firstDayOfMonth - 1; i >= 0; i--) {
     const dayNum = daysInPrevMonth - i;
@@ -180,14 +178,12 @@ export const CalendarPage: React.FC = () => {
     prevMonthDays.push({ dayNum, dateStr, isCurrentMonth: false });
   }
 
-  // Current Month Days
   const currentMonthDays = [];
   for (let d = 1; d <= daysInCurrentMonth; d++) {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     currentMonthDays.push({ dayNum: d, dateStr, isCurrentMonth: true });
   }
 
-  // Next Month Days to fill 42 cells (6 rows)
   const totalSoFar = prevMonthDays.length + currentMonthDays.length;
   const nextMonthDaysCount = 42 - totalSoFar;
   const nextMonthDays = [];
@@ -245,22 +241,6 @@ export const CalendarPage: React.FC = () => {
     await loadAllData();
   };
 
-  // Handle deleting item
-  // Handle deleting item
-  const handleDeleteEvent = async (event: CalendarEvent) => {
-    // 👇 加入确认提示
-    if (!window.confirm('确定要删除这条记录吗？删除后将无法恢复哦！')) return;
-
-    if (event.type === 'memory') {
-      await dataService.deleteMemory(event.id);
-    } else if (event.type === 'journal') {
-      await dataService.deleteJournalEntry(event.id);
-    } else if (event.type === 'note') {
-      await dataService.deleteNote(event.id);
-    }
-    await loadData();
-  };
-
   const getEventBadgeClass = (type: CalendarEvent['type']) => {
     switch (type) {
       case 'memory':
@@ -287,7 +267,6 @@ export const CalendarPage: React.FC = () => {
     }
   };
 
-  // 👇 修改了日期的展示格式为中文
   const formatDisplayDate = (dateStr: string) => {
     if (!dateStr) return '';
     const parts = dateStr.split('-');
@@ -472,14 +451,6 @@ export const CalendarPage: React.FC = () => {
                         </h4>
                       </div>
                     </div>
-
-                    <button
-                      onClick={() => handleDeleteEvent(evt)}
-                      className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 opacity-0 group-hover:opacity-100 transition-all"
-                      title="删除"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
                   </div>
 
                   {evt.photo_url && (
@@ -516,7 +487,7 @@ export const CalendarPage: React.FC = () => {
 
       {/* Modal Add Form */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-pink-100 relative max-h-[90vh] overflow-y-auto">
             
             <button
@@ -598,10 +569,12 @@ export const CalendarPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">上传照片</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">照片 / 媒体</label>
                 <MediaUploader
-                  type="image"
-                  onUploadComplete={(url) => setFormPhotoUrl(url)}
+                  bucket="photos"
+                  label="上传照片（可选）"
+                  accept="image/*"
+                  onUploadSuccess={(url) => setFormPhotoUrl(url)}
                 />
               </div>
 
