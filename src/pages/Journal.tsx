@@ -5,6 +5,7 @@ import { JournalEntry, Memory } from '../types';
 import { dataService } from '../services/dataService';
 import { useCouple } from '../context/CoupleContext';
 import { MediaUploader } from '../components/MediaUploader';
+import { Lightbox } from '../components/Lightbox'; // 👈 引入放大组件
 
 export const Journal: React.FC = () => {
   const { settings } = useCouple();
@@ -13,6 +14,9 @@ export const Journal: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
+
+  // 👈 添加用于控制点击放大的状态
+  const [activePhoto, setActivePhoto] = useState<{ url: string; title?: string; desc?: string } | null>(null);
 
   // Form state
   const [title, setTitle] = useState('');
@@ -210,8 +214,12 @@ export const Journal: React.FC = () => {
                   {entry.content}
                 </p>
 
-               {entry.photo_url && (
-                  <div className="rounded-2xl overflow-hidden bg-slate-50 border border-rose-100/80 shadow-xs flex justify-center">
+                {/* 👇 修改了图片渲染，加入点击放大功能 */}
+                {entry.photo_url && (
+                  <div 
+                    className="rounded-2xl overflow-hidden bg-slate-50 border border-rose-100/80 shadow-xs flex justify-center cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => setActivePhoto({ url: entry.photo_url!, title: entry.title, desc: entry.content })}
+                  >
                     <img
                       src={entry.photo_url}
                       alt={entry.title}
@@ -359,6 +367,19 @@ export const Journal: React.FC = () => {
           </motion.div>
         </div>
       )}
+
+      {/* 👈 放大弹窗组件放在最外层 */}
+      {activePhoto && (
+        <Lightbox
+          isOpen={!!activePhoto}
+          onClose={() => setActivePhoto(null)}
+          mediaUrl={activePhoto.url}
+          mediaType="image"
+          title={activePhoto.title}
+          description={activePhoto.desc}
+        />
+      )}
+
     </div>
   );
 };
