@@ -9,11 +9,15 @@ import {
 } from 'lucide-react';
 import { useCouple } from '../context/CoupleContext';
 import { MediaUploader } from '../components/MediaUploader';
+import { Lightbox } from '../components/Lightbox'; // 👈 引入放大组件
 
 export const Settings: React.FC = () => {
   const { settings, updateSettings } = useCouple();
   const [formState, setFormState] = useState({ ...settings });
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  // 👈 添加用于控制点击放大的状态
+  const [activePhoto, setActivePhoto] = useState<{ url: string; title?: string; desc?: string } | null>(null);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,6 +85,15 @@ export const Settings: React.FC = () => {
               accept="image/*"
               onUploadSuccess={(url) => setFormState({ ...formState, partner1_avatar: url })}
             />
+            {/* 👈 加一个可点击放大的头像预览圈 */}
+            {formState.partner1_avatar && (
+              <div 
+                className="mt-2 w-16 h-16 rounded-full overflow-hidden border-2 border-rose-200 cursor-pointer hover:opacity-80 transition-opacity shadow-sm"
+                onClick={() => setActivePhoto({ url: formState.partner1_avatar!, title: '伴侣 1 头像' })}
+              >
+                <img src={formState.partner1_avatar} alt="Partner 1" className="w-full h-full object-cover" />
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -91,6 +104,15 @@ export const Settings: React.FC = () => {
               accept="image/*"
               onUploadSuccess={(url) => setFormState({ ...formState, partner2_avatar: url })}
             />
+            {/* 👈 加一个可点击放大的头像预览圈 */}
+            {formState.partner2_avatar && (
+              <div 
+                className="mt-2 w-16 h-16 rounded-full overflow-hidden border-2 border-rose-200 cursor-pointer hover:opacity-80 transition-opacity shadow-sm"
+                onClick={() => setActivePhoto({ url: formState.partner2_avatar!, title: '伴侣 2 头像' })}
+              >
+                <img src={formState.partner2_avatar} alt="Partner 2" className="w-full h-full object-cover" />
+              </div>
+            )}
           </div>
         </div>
 
@@ -140,7 +162,10 @@ export const Settings: React.FC = () => {
             <div className="bg-rose-50/50 p-3 rounded-2xl border border-rose-100 flex flex-col items-center justify-center text-center">
               <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">背景预览</span>
               {formState.cover_photo ? (
-                <div className="relative w-full h-32 rounded-xl overflow-hidden shadow-sm border border-rose-200 group">
+                <div 
+                  className="relative w-full h-32 rounded-xl overflow-hidden shadow-sm border border-rose-200 group cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => setActivePhoto({ url: formState.cover_photo!, title: '首页背景照片' })}
+                >
                   <img
                     src={formState.cover_photo}
                     alt="Background Preview"
@@ -149,7 +174,10 @@ export const Settings: React.FC = () => {
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <button
                       type="button"
-                      onClick={() => setFormState({ ...formState, cover_photo: '' })}
+                      onClick={(e) => {
+                        e.stopPropagation(); // 👈 阻止冒泡，防止点删除时触发放大
+                        setFormState({ ...formState, cover_photo: '' });
+                      }}
                       className="px-3 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold shadow-md hover:bg-rose-700"
                     >
                       删除
@@ -231,6 +259,18 @@ export const Settings: React.FC = () => {
           </button>
         </div>
       </form>
+
+      {/* 👈 放大弹窗组件放在最外层 */}
+      {activePhoto && (
+        <Lightbox
+          isOpen={!!activePhoto}
+          onClose={() => setActivePhoto(null)}
+          mediaUrl={activePhoto.url}
+          mediaType="image"
+          title={activePhoto.title}
+          description={activePhoto.desc}
+        />
+      )}
 
     </div>
   );
