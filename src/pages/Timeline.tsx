@@ -28,14 +28,14 @@ export const Timeline: React.FC = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [fetchedMemories, fetchedJournals, fetchedNotes, fetchedSongs] = await Promise.all([
+      // 👇 修改：去掉了 getNotes，不再拉取小纸条数据
+      const [fetchedMemories, fetchedJournals, fetchedSongs] = await Promise.all([
         dataService.getMemories(),
         dataService.getJournalEntries(),
-        dataService.getNotes(),
         dataService.getSongs()
       ]);
 
-      // 👇 修改：将日记和情话的数据转换成“回忆”的格式
+      // 👇 修改：只合并回忆和日记
       const mergedData: Memory[] = [
         ...fetchedMemories,
         ...fetchedJournals.map((j) => ({
@@ -44,21 +44,10 @@ export const Timeline: React.FC = () => {
           description: j.content,
           date: j.created_at ? j.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
           photo_url: j.photo_url || (j as any).attachment_url,
-          category: 'daily', // 👈 强制归类到日常生活
+          category: 'daily', // 强制归类到日常生活
           location: '',
           song_id: '',
           created_at: j.created_at
-        })),
-        ...fetchedNotes.map((n) => ({
-          id: n.id,
-          title: `[情话] 来自 ${n.sender}`,
-          description: n.message,
-          date: n.created_at ? n.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
-          photo_url: n.attachment_url,
-          category: 'daily', // 👈 情话也归类到日常
-          location: '',
-          song_id: '',
-          created_at: n.created_at
         }))
       ].sort((a, b) => {
         const dateA = new Date(a.date || (a as any).created_at).getTime();
