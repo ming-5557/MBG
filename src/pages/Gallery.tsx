@@ -7,10 +7,8 @@ import { Lightbox } from '../components/Lightbox';
 import { MediaUploader } from '../components/MediaUploader';
 
 export const Gallery: React.FC = () => {
-  const [memories, setMemories] = useState<Memory[]>([]);
-  const [activeAlbum, setActiveAlbum] = useState('all');
+  const [photos, setPhotos] = useState<Memory[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingPhoto, setEditingPhoto] = useState<Memory | null>(null);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   // Photo form state
@@ -20,8 +18,46 @@ export const Gallery: React.FC = () => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
   const loadData = async () => {
-    const data = await dataService.getMemories();
-    setMemories(data.filter((m) => Boolean(m.photo_url)));
+    // 👇 修改：同时拉取三个表
+    const [memoriesData, journalsData, notesData] = await Promise.all([
+      dataService.getMemories(),
+      dataService.getJournalEntries(),
+      dataService.getNotes()
+    ]);
+
+    // 收集所有包含照片的数据
+    const allPhotos: Memory[] = [
+      ...memoriesData.filter((m) => Boolean(m.photo_url)),
+      ...journalsData
+        .filter((j) => Boolean(j.photo_url || (j as any).attachment_url))
+        .map((j) => ({
+          id: j.id,
+          title: `[日记] ${j.title}`,
+          description: j.content,
+          date: j.created_at ? j.created_at.split('T')[0] : '',
+          photo_url: j.photo_url || (j as any).attachment_url,
+          category: 'daily' as const
+        })),
+      ...notesData
+        .filter((n) => Boolean(n.attachment_url))
+        .map((n) => ({
+          id: n.id,
+          title: `[情话] 来自 ${n.sender}`,
+          description: n.message,
+          date: n.created_at ? n.created_at.split('T')[0] : '',
+          photo_url: n.attachment_url,
+          category: 'daily' as const
+        }))
+    ];
+
+    // 按时间排序
+    allPhotos.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA;
+    });
+
+    setPhotos(allPhotos);
   };
 
   useEffect(() => {
@@ -29,7 +65,6 @@ export const Gallery: React.FC = () => {
   }, []);
 
   const openCreateModal = () => {
-    setEditingPhoto(null);
     setTitle('');
     setCategory('daily');
     setPhotoUrl('');
@@ -37,64 +72,23 @@ export const Gallery: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const openEditModal = (photo: Memory, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setEditingPhoto(photo);
-    setTitle(photo.title);
-    setCategory(photo.category || 'daily');
-    setPhotoUrl(photo.photo_url || '');
-    setDate(photo.date || new Date().toISOString().split('T')[0]);
-    setIsModalOpen(true);
-  };
-
   const handleSavePhoto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!photoUrl) return;
 
-    if (editingPhoto) {
-      await dataService.updateMemory({
-        ...editingPhoto,
-        title: title || '相册照片',
-        category,
-        photo_url: photoUrl,
-        date
-      });
-    } else {
-      await dataService.addMemory({
-        title: title || '相册照片',
-        description: '记录在我们的情侣相册中',
-        date,
-        photo_url: photoUrl,
-        category
-      });
-    }
+    await dataService.addMemory({
+      title: title || '相册照片',
+      description: '记录在我们的情侣相册中',
+      date,
+      photo_url: photoUrl,
+      category
+    });
 
     setIsModalOpen(false);
     await loadData();
   };
 
-  const handleDeletePhoto = async (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (window.confirm('确定要删除这张照片吗？')) {
-      await dataService.deleteMemory(id);
-      await loadData();
-    }
-  };
-
-  const albums = [
-    { id: 'all', label: '全部照片' },
-    { id: 'first_date', label: '表白日' },
-    { id: 'travel', label: '游玩' },
-    { id: 'anniversary', label: '纪念日' },
-    { id: 'daily', label: '每日的笑容' }
-  ];
-
-  const filteredPhotos = memories.filter((m) => {
-    if (activeAlbum === 'all') return true;
-    return m.category === activeAlbum;
-  });
-
-  const activePhoto = lightboxIdx !== null ? filteredPhotos[lightboxIdx] : null;
+  const activePhoto = lightboxIdx !== null ? photos[lightboxIdx] : null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
@@ -110,7 +104,7 @@ export const Gallery: React.FC = () => {
             我们的相册
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            捕捉我们最喜欢的瞬间、旅行以及在一起的静谧时光。
+            这里展示了所有上传的照片，不分类别。
           </p>
         </div>
 
@@ -123,26 +117,11 @@ export const Gallery: React.FC = () => {
         </button>
       </div>
 
-      {/* Album Tabs */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
-        {albums.map((album) => (
-          <button
-            key={album.id}
-            onClick={() => setActiveAlbum(album.id)}
-            className={`px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
-              activeAlbum === album.id
-                ? 'bg-rose-500 text-white shadow-md shadow-rose-200'
-                : 'bg-white/80 text-slate-600 border border-rose-100 hover:bg-rose-50'
-            }`}
-          >
-            {album.label}
-          </button>
-        ))}
-      </div>
-
+      {/* 👇 移除了分类 Tabs，直接展示所有照片 */}
+      
       {/* Masonry Grid */}
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-        {filteredPhotos.map((item, idx) => (
+        {photos.map((item, idx) => (
           <motion.div
             key={item.id}
             layout
@@ -158,24 +137,6 @@ export const Gallery: React.FC = () => {
               className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
             />
             
-            {/* Quick Actions overlay top right */}
-            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center space-x-1.5 z-10">
-              <button
-                onClick={(e) => openEditModal(item, e)}
-                className="p-1.5 rounded-full bg-white/90 text-slate-700 hover:text-rose-600 shadow-md backdrop-blur-xs transition-colors"
-                title="编辑照片"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={(e) => handleDeletePhoto(item.id, e)}
-                className="p-1.5 rounded-full bg-white/90 text-slate-700 hover:text-rose-600 shadow-md backdrop-blur-xs transition-colors"
-                title="删除照片"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
             <div className="absolute inset-0 bg-gradient-to-t from-rose-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end text-white">
               <span className="text-[10px] text-rose-300 font-semibold uppercase tracking-wider">{item.date}</span>
               <h4 className="font-serif font-bold text-sm text-white truncate">{item.title}</h4>
@@ -188,15 +149,15 @@ export const Gallery: React.FC = () => {
         ))}
       </div>
 
-      {filteredPhotos.length === 0 && (
+      {photos.length === 0 && (
         <div className="text-center py-16 glass-card rounded-3xl p-8 border border-rose-100">
           <Sparkles className="w-10 h-10 text-rose-400 mx-auto mb-3" />
-          <h4 className="font-serif font-bold text-lg text-slate-800">这个相册里还没有照片哦</h4>
+          <h4 className="font-serif font-bold text-lg text-slate-800">相册里还没有照片哦</h4>
           <p className="text-xs text-slate-500 mt-1">上传一张新照片，加入到我们的爱情画廊吧！</p>
         </div>
       )}
 
-      {/* Upload/Edit Photo Modal */}
+      {/* Upload Photo Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 pt-16 sm:pt-20 overflow-y-auto">
           <motion.div
@@ -207,7 +168,7 @@ export const Gallery: React.FC = () => {
             <div className="p-4 sm:p-5 border-b border-rose-100 flex items-center justify-between shrink-0 bg-white">
               <h3 className="font-serif font-bold text-lg sm:text-xl text-slate-800 flex items-center space-x-2">
                 <ImageIcon className="w-5 h-5 text-rose-500" />
-                <span>{editingPhoto ? '编辑照片' : '上传到相册'}</span>
+                <span>上传到相册</span>
               </h3>
               <button
                 type="button"
@@ -239,10 +200,10 @@ export const Gallery: React.FC = () => {
                       onChange={(e) => setCategory(e.target.value as any)}
                       className="w-full px-3 py-2 rounded-xl border border-rose-200 text-xs sm:text-sm outline-none bg-white"
                     >
-                      <option value="first_date">表白日</option>
-                      <option value="travel"> 游玩</option>
+                      <option value="first_date">初次约会</option>
+                      <option value="travel">旅行 & 游玩</option>
                       <option value="anniversary">纪念日</option>
-                      <option value="daily">每日的笑容</option>
+                      <option value="daily">日常笑容</option>
                     </select>
                   </div>
 
@@ -279,7 +240,7 @@ export const Gallery: React.FC = () => {
                   disabled={!photoUrl}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-xs shadow-md disabled:opacity-50 hover:scale-105 transition-all"
                 >
-                  {editingPhoto ? '更新照片' : '保存照片'}
+                  保存照片
                 </button>
               </div>
             </form>
@@ -287,7 +248,6 @@ export const Gallery: React.FC = () => {
         </div>
       )}
 
-      {/* Lightbox Preview */}
       <Lightbox
         isOpen={lightboxIdx !== null}
         onClose={() => setLightboxIdx(null)}
@@ -296,9 +256,9 @@ export const Gallery: React.FC = () => {
         title={activePhoto?.title}
         description={activePhoto?.description}
         hasPrev={lightboxIdx !== null && lightboxIdx > 0}
-        hasNext={lightboxIdx !== null && lightboxIdx < filteredPhotos.length - 1}
+        hasNext={lightboxIdx !== null && lightboxIdx < photos.length - 1}
         onPrev={() => setLightboxIdx((idx) => (idx !== null ? Math.max(0, idx - 1) : null))}
-        onNext={() => setLightboxIdx((idx) => (idx !== null ? Math.min(filteredPhotos.length - 1, idx + 1) : null))}
+        onNext={() => setLightboxIdx((idx) => (idx !== null ? Math.min(photos.length - 1, idx + 1) : null))}
       />
     </div>
   );
