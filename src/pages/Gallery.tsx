@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Plus, Maximize2, Sparkles, Image as ImageIcon, Heart, X, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Maximize2, Sparkles, Image as ImageIcon, X } from 'lucide-react';
 import { Memory } from '../types';
 import { dataService } from '../services/dataService';
 import { Lightbox } from '../components/Lightbox';
@@ -11,21 +11,18 @@ export const Gallery: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
-  // Photo form state
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState<'first_date' | 'travel' | 'anniversary' | 'celebration' | 'daily'>('daily');
   const [photoUrl, setPhotoUrl] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
   const loadData = async () => {
-    // 👇 修改：同时拉取三个表
     const [memoriesData, journalsData, notesData] = await Promise.all([
       dataService.getMemories(),
       dataService.getJournalEntries(),
       dataService.getNotes()
     ]);
 
-    // 收集所有包含照片的数据
     const allPhotos: Memory[] = [
       ...memoriesData.filter((m) => Boolean(m.photo_url)),
       ...journalsData
@@ -50,13 +47,7 @@ export const Gallery: React.FC = () => {
         }))
     ];
 
-    // 按时间排序
-    allPhotos.sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
-      return dateB - dateA;
-    });
-
+    allPhotos.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     setPhotos(allPhotos);
   };
 
@@ -80,7 +71,7 @@ export const Gallery: React.FC = () => {
       title: title || '相册照片',
       description: '记录在我们的情侣相册中',
       date,
-      photo_url: photoUrl,
+      photo_url: photoUrl, // 这里直接存逗号拼接的字符串
       category
     });
 
@@ -92,8 +83,6 @@ export const Gallery: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
-      
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-xs font-semibold mb-2">
@@ -104,7 +93,7 @@ export const Gallery: React.FC = () => {
             我们的相册
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            这里展示了所有上传的照片，不分类别。
+            这里展示了所有上传的照片，支持一次上传多张。
           </p>
         </div>
 
@@ -116,46 +105,51 @@ export const Gallery: React.FC = () => {
           <span>上传照片</span>
         </button>
       </div>
-
-      {/* 👇 移除了分类 Tabs，直接展示所有照片 */}
       
-      {/* Masonry Grid */}
       <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-        {photos.map((item, idx) => (
-          <motion.div
-            key={item.id}
-            layout
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            onClick={() => setLightboxIdx(idx)}
-            className="relative group rounded-3xl overflow-hidden glass-card cursor-pointer border border-rose-100 shadow-sm hover:shadow-xl transition-all duration-300 break-inside-avoid"
-          >
-            <img
-              src={item.photo_url}
-              alt={item.title}
-              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            
-            <div className="absolute inset-0 bg-gradient-to-t from-rose-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end text-white">
-              <span className="text-[10px] text-rose-300 font-semibold uppercase tracking-wider">{item.date}</span>
-              <h4 className="font-serif font-bold text-sm text-white truncate">{item.title}</h4>
-              <div className="flex items-center space-x-1 text-[11px] text-rose-200 mt-1">
-                <Maximize2 className="w-3 h-3" />
-                <span>点击查看大图</span>
+        {photos.map((item, idx) => {
+          // 👇 核心修改：把逗号拼接的链接拆分成数组
+          const urls = item.photo_url ? item.photo_url.split(',') : [];
+          
+          return (
+            <motion.div
+              key={item.id}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="relative group rounded-3xl overflow-hidden glass-card border border-rose-100 shadow-sm hover:shadow-xl transition-all duration-300 break-inside-avoid"
+            >
+              {/* 👇 如果有多张，就渲染多张 */}
+              {urls.map((url, i) => (
+                <div 
+                  key={i} 
+                  onClick={() => setLightboxIdx(idx)}
+                  className="cursor-pointer"
+                >
+                  <img
+                    src={url}
+                    alt={item.title}
+                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              ))}
+              
+              <div 
+                onClick={() => setLightboxIdx(idx)}
+                className="absolute inset-0 bg-gradient-to-t from-rose-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end text-white cursor-pointer"
+              >
+                <span className="text-[10px] text-rose-300 font-semibold uppercase tracking-wider">{item.date}</span>
+                <h4 className="font-serif font-bold text-sm text-white truncate">{item.title}</h4>
+                <div className="flex items-center space-x-1 text-[11px] text-rose-200 mt-1">
+                  <Maximize2 className="w-3 h-3" />
+                  <span>点击查看大图</span>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
-
-      {photos.length === 0 && (
-        <div className="text-center py-16 glass-card rounded-3xl p-8 border border-rose-100">
-          <Sparkles className="w-10 h-10 text-rose-400 mx-auto mb-3" />
-          <h4 className="font-serif font-bold text-lg text-slate-800">相册里还没有照片哦</h4>
-          <p className="text-xs text-slate-500 mt-1">上传一张新照片，加入到我们的爱情画廊吧！</p>
-        </div>
-      )}
 
       {/* Upload Photo Modal */}
       {isModalOpen && (
@@ -220,7 +214,7 @@ export const Gallery: React.FC = () => {
 
                 <MediaUploader
                   bucket="photos"
-                  label="上传照片（文件或链接）"
+                  label="上传照片（可多选）"
                   accept="image/*"
                   value={photoUrl}
                   onChange={setPhotoUrl}
@@ -251,7 +245,7 @@ export const Gallery: React.FC = () => {
       <Lightbox
         isOpen={lightboxIdx !== null}
         onClose={() => setLightboxIdx(null)}
-        mediaUrl={activePhoto?.photo_url || ''}
+        mediaUrl={activePhoto?.photo_url?.split(',')[0] || ''} // 大图预览只显示第一张
         mediaType="image"
         title={activePhoto?.title}
         description={activePhoto?.description}
