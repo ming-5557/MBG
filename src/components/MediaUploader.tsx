@@ -33,30 +33,49 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setErrorMsg(null);
     setSuccessMsg(null);
     setIsUploading(true);
-    setProgress(10);
+    setProgress(0);
+
+    const uploadedUrls: string[] = [];
+    let successCount = 0;
 
     try {
       const targetBucket = (['photos', 'videos', 'music', 'notes-attachments'].includes(bucket)
         ? bucket
         : 'photos') as 'photos' | 'videos' | 'music' | 'notes-attachments';
 
-      const publicUrl = await dataService.uploadFile(file, targetBucket, (pct) => {
-        setProgress(pct);
-      });
+      // 👇 循环上传所有选中的文件
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // 计算整体进度
+        const fileProgressCallback = (pct: number) => {
+          const overallProgress = Math.floor(((i + pct / 100) / files.length) * 100);
+          setProgress(overallProgress);
+        };
 
-      setSuccessMsg(`Berhasil mengunggah ${file.name}`);
-      notifyChange(publicUrl);
+        const publicUrl = await dataService.uploadFile(file, targetBucket, fileProgressCallback);
+        uploadedUrls.push(publicUrl);
+        successCount++;
+      }
+
+      setSuccessMsg(`成功上传 ${successCount} 个文件！`);
+      // 👇 将多个链接用逗号拼接后返回给父组件
+      notifyChange(uploadedUrls.join(','));
     } catch (err: any) {
       console.error('File upload failed:', err);
-      setErrorMsg(err.message || 'Gagal mengunggah file. Silakan periksa format file.');
+      setErrorMsg(`上传中断：${err.message || '请检查文件格式'}`);
+      if (uploadedUrls.length > 0) {
+        notifyChange(uploadedUrls.join(',')); // 把已经传成功的先存上
+      }
     } finally {
       setIsUploading(false);
+      e.target.value = ''; // 清空 input，允许重复选择
     }
   };
 
@@ -78,6 +97,9 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
   };
 
   const BucketIcon = getIcon();
+
+  // 👇 把逗号拼接的链接拆分成数组，用于多图预览
+  const previewUrls = value ? value.split(',') : [];
 
   return (
     <div className="w-full space-y-3">
@@ -112,6 +134,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
           <input
             type="file"
             accept={accept}
+            multiple // 👈 开启多选
             onChange={handleFileChange}
             disabled={isUploading}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-10"
@@ -127,7 +150,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
             )}
 
             <div className="text-xs font-medium text-slate-700">
-              {isUploading ? 'Mengunggah file...' : '点击或将照片拖拽到这里上传'}
+              {isUploading ? '正在上传中...' : '点击或将文件拖拽到这里上传（可多选）'}
             </div>
             <p className="text-[10px] text-slate-400">
               支持格式: PNG, JPG, WEBP, GIF
@@ -139,7 +162,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
           <LinkIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="url"
-            placeholder="Tempel tautan URL gambar (https://...)"
+            placeholder="粘贴图片链接 (https://...)"
             value={value}
             onChange={handleUrlInputChange}
             className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-rose-200 focus:border-rose-400 text-xs outline-none bg-white"
@@ -151,7 +174,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
       {isUploading && (
         <div className="w-full bg-rose-100 rounded-full h-2 overflow-hidden">
           <div
-            className="bg-linear-to-r from-rose-400 to-pink-500 h-2 rounded-full transition-all duration-300"
+            className="bg-gradient-to-r from-rose-400 to-pink-500 h-2 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -173,36 +196,39 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
         </div>
       )}
 
-      {/* Preview Box */}
+      {/* 👇 多图预览框改造 */}
       {value && (
-        <div className="relative mt-2 rounded-2xl overflow-hidden border border-rose-200 bg-white p-2.5 flex items-center justify-between space-x-3 shadow-2xs">
-          <div className="flex items-center space-x-3 overflow-hidden">
-            {type === 'image' || bucket === 'photos' || bucket === 'notes-attachments' ? (
-              <img src={value} alt="Preview" className="w-14 h-14 object-cover rounded-xl border border-slate-100 shrink-0" referrerPolicy="no-referrer" />
-            ) : type === 'video' || bucket === 'videos' ? (
-              <video src={value} className="w-14 h-14 object-cover rounded-xl shrink-0" />
-            ) : (
-              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center shrink-0">
-                <Music className="w-6 h-6" />
+        <div className="relative mt-2 rounded-2xl overflow-hidden border border-rose-200 bg-white p-3 shadow-2xs">
+          <div className="flex flex-wrap gap-2">
+            {previewUrls.map((url, idx) => (
+              <div key={idx} className="relative w-14 h-14 shrink-0">
+                {type === 'image' || bucket === 'photos' || bucket === 'notes-attachments' ? (
+                  <img src={url} alt="Preview" className="w-full h-full object-cover rounded-xl border border-slate-100" referrerPolicy="no-referrer" />
+                ) : type === 'video' || bucket === 'videos' ? (
+                  <video src={url} className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  <div className="w-full h-full bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center">
+                    <Music className="w-6 h-6" />
+                  </div>
+                )}
               </div>
-            )}
-            <div className="text-xs truncate">
-              <p className="font-bold text-slate-800 flex items-center space-x-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Foto Terpasang</span>
-              </p>
-              <p className="text-[10px] text-slate-400 truncate max-w-50">{value}</p>
-            </div>
+            ))}
           </div>
-
-          <button
-            type="button"
-            onClick={handleClear}
-            className="p-1.5 rounded-full hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors shrink-0"
-            title="Hapus foto"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          
+          <div className="flex items-center justify-between mt-3 pt-2 border-t border-rose-100">
+            <p className="text-[11px] text-emerald-600 font-bold flex items-center space-x-1">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>已选择 {previewUrls.length} 个文件</span>
+            </p>
+            <button
+              type="button"
+              onClick={handleClear}
+              className="text-[11px] text-rose-500 hover:text-rose-700 font-bold flex items-center space-x-1 bg-rose-50 px-2 py-1 rounded-md"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>清空重选</span>
+            </button>
+          </div>
         </div>
       )}
     </div>
