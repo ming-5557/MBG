@@ -15,13 +15,13 @@ import {
 import { dataService } from '../services/dataService';
 import { Memory, Note, JournalEntry, Milestone } from '../types';
 import { MediaUploader } from '../components/MediaUploader';
-import { Lightbox } from '../components/Lightbox'; // 👈 引入放大组件
+import { Lightbox } from '../components/Lightbox'; 
 
 interface CalendarEvent {
   id: string;
   type: 'memory' | 'journal' | 'note' | 'milestone';
   title: string;
-  date: string; // YYYY-MM-DD
+  date: string; 
   description?: string;
   photo_url?: string;
   video_url?: string;
@@ -42,15 +42,11 @@ export const CalendarPage: React.FC = () => {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [addType, setAddType] = useState<'memory' | 'journal' | 'note'>('memory');
   const [filterType, setFilterType] = useState<'all' | 'memory' | 'journal' | 'note'>('all');
-
-  // 👈 照片放大状态
   const [activePhoto, setActivePhoto] = useState<{ url: string; title?: string; desc?: string } | null>(null);
 
-  // Form Fields
   const [formTitle, setFormTitle] = useState('');
   const [formDescription, setFormDescription] = useState('');
   const [formCategory, setFormCategory] = useState<any>('daily');
@@ -139,20 +135,12 @@ export const CalendarPage: React.FC = () => {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const prevMonth = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
-  };
-
-  const nextMonth = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
-  };
-
+  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
   const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
 
   const eventsByDate = allEvents.reduce<Record<string, CalendarEvent[]>>((acc, evt) => {
-    if (!acc[evt.date]) {
-      acc[evt.date] = [];
-    }
+    if (!acc[evt.date]) acc[evt.date] = [];
     acc[evt.date].push(evt);
     return acc;
   }, {});
@@ -198,68 +186,33 @@ export const CalendarPage: React.FC = () => {
     if (!formTitle.trim() && addType !== 'note') return;
 
     if (addType === 'memory') {
-      await dataService.addMemory({
-        title: formTitle,
-        description: formDescription,
-        date: selectedDateStr,
-        photo_url: formPhotoUrl || undefined,
-        video_url: formVideoUrl || undefined,
-        location: formLocation || undefined,
-        category: formCategory
-      });
+      await dataService.addMemory({ title: formTitle, description: formDescription, date: selectedDateStr, photo_url: formPhotoUrl || undefined, video_url: formVideoUrl || undefined, location: formLocation || undefined, category: formCategory });
     } else if (addType === 'journal') {
-      await dataService.addJournalEntry({
-        title: formTitle,
-        content: formDescription,
-        mood: formMood,
-        author: formSender,
-        photo_url: formPhotoUrl || undefined,
-        video_url: formVideoUrl || undefined
-      });
+      await dataService.addJournalEntry({ title: formTitle, content: formDescription, mood: formMood, author: formSender, photo_url: formPhotoUrl || undefined, video_url: formVideoUrl || undefined });
     } else if (addType === 'note') {
-      await dataService.addNote({
-        sender: formSender,
-        receiver: formReceiver,
-        message: formDescription || formTitle,
-        attachment_url: formPhotoUrl || undefined,
-        is_pinned: false,
-        theme: 'rose'
-      });
+      await dataService.addNote({ sender: formSender, receiver: formReceiver, message: formDescription || formTitle, attachment_url: formPhotoUrl || undefined, is_pinned: false, theme: 'rose' });
     }
 
-    setFormTitle('');
-    setFormDescription('');
-    setFormPhotoUrl('');
-    setFormVideoUrl('');
-    setFormLocation('');
+    setFormTitle(''); setFormDescription(''); setFormPhotoUrl(''); setFormVideoUrl(''); setFormLocation('');
     setIsModalOpen(false);
-
     await loadAllData();
   };
 
   const getEventBadgeClass = (type: CalendarEvent['type']) => {
     switch (type) {
-      case 'memory':
-        return 'bg-rose-100 text-rose-700 border-rose-200';
-      case 'journal':
-        return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'note':
-        return 'bg-pink-100 text-pink-700 border-pink-200';
-      case 'milestone':
-        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+      case 'memory': return 'bg-rose-100 text-rose-700 border-rose-200';
+      case 'journal': return 'bg-amber-100 text-amber-700 border-amber-200';
+      case 'note': return 'bg-pink-100 text-pink-700 border-pink-200';
+      case 'milestone': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
     }
   };
 
   const getEventIcon = (type: CalendarEvent['type']) => {
     switch (type) {
-      case 'memory':
-        return <Heart className="w-3.5 h-3.5 text-rose-500" />;
-      case 'journal':
-        return <BookOpen className="w-3.5 h-3.5 text-amber-500" />;
-      case 'note':
-        return <FileText className="w-3.5 h-3.5 text-pink-500" />;
-      case 'milestone':
-        return <Trophy className="w-3.5 h-3.5 text-emerald-500" />;
+      case 'memory': return <Heart className="w-3.5 h-3.5 text-rose-500" />;
+      case 'journal': return <BookOpen className="w-3.5 h-3.5 text-amber-500" />;
+      case 'note': return <FileText className="w-3.5 h-3.5 text-pink-500" />;
+      case 'milestone': return <Trophy className="w-3.5 h-3.5 text-emerald-500" />;
     }
   };
 
@@ -267,69 +220,36 @@ export const CalendarPage: React.FC = () => {
     if (!dateStr) return '';
     const parts = dateStr.split('-');
     if (parts.length !== 3) return dateStr;
-    const yearNum = parts[0];
-    const monthNum = parseInt(parts[1], 10);
-    const dayNum = parseInt(parts[2], 10);
-    return `${yearNum}年${monthNum}月${dayNum}日`;
+    return `${parts[0]}年${parseInt(parts[1], 10)}月${parseInt(parts[2], 10)}日`;
   };
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8">
       
-      {/* Clean Minimalist Header */}
       <div className="text-center space-y-2">
-        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-[#2D2426] tracking-tight">
-          回忆日历
-        </h1>
-        <p className="text-xs sm:text-sm text-[#4A3B3E]/70 max-w-md mx-auto">
-          选择日期，查看或记录我们的甜蜜瞬间。
-        </p>
+        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-[#2D2426] tracking-tight">回忆日历</h1>
+        <p className="text-xs sm:text-sm text-[#4A3B3E]/70 max-w-md mx-auto">选择日期，查看或记录我们的甜蜜瞬间。</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* Simple & Clean Calendar Card */}
         <div className="lg:col-span-7 bg-white rounded-[28px] sm:rounded-[32px] p-6 sm:p-8 shadow-sm border border-[#FDE2E8] space-y-6">
-          
           <div className="flex items-center justify-between">
-            <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#2D2426] tracking-tight">
-              {year}年 {month + 1}月
-            </h2>
-
+            <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#2D2426] tracking-tight">{year}年 {month + 1}月</h2>
             <div className="flex items-center space-x-3">
-              <button
-                onClick={prevMonth}
-                className="p-1.5 rounded-full hover:bg-pink-50 text-[#DB2777] transition-colors"
-                aria-label="上个月"
-              >
-                <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
-              </button>
-              <button
-                onClick={nextMonth}
-                className="p-1.5 rounded-full hover:bg-pink-50 text-[#DB2777] transition-colors"
-                aria-label="下个月"
-              >
-                <ChevronRight className="w-5 h-5 stroke-[2.5]" />
-              </button>
+              <button onClick={prevMonth} className="p-1.5 rounded-full hover:bg-pink-50 text-[#DB2777] transition-colors"><ChevronLeft className="w-5 h-5 stroke-[2.5]" /></button>
+              <button onClick={nextMonth} className="p-1.5 rounded-full hover:bg-pink-50 text-[#DB2777] transition-colors"><ChevronRight className="w-5 h-5 stroke-[2.5]" /></button>
             </div>
           </div>
 
           <div className="grid grid-cols-7 text-center pb-3 border-b border-[#FDE2E8]/80">
-            {dayNames.map((d) => (
-              <div
-                key={d}
-                className="text-xs font-sans font-bold text-[#4A3B3E]/70 uppercase tracking-wider"
-              >
-                {d}
-              </div>
-            ))}
+            {dayNames.map((d) => (<div key={d} className="text-xs font-sans font-bold text-[#4A3B3E]/70 uppercase tracking-wider">{d}</div>))}
           </div>
 
           <div className="grid grid-cols-7 gap-y-3 sm:gap-y-4 text-center">
             {calendarCells.map((cell, idx) => {
               const isSelected = selectedDateStr === cell.dateStr;
               const hasEvents = (eventsByDate[cell.dateStr] || []).length > 0;
-
               return (
                 <div key={`${cell.dateStr}-${idx}`} className="flex flex-col items-center justify-center">
                   <button
@@ -340,67 +260,29 @@ export const CalendarPage: React.FC = () => {
                         setCurrentDate(new Date(clickedDate.getFullYear(), clickedDate.getMonth(), 1));
                       }
                     }}
-                    className={`relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-sans transition-all ${
-                      isSelected
-                        ? 'bg-[#DB2777] text-white font-bold shadow-md shadow-pink-500/30 scale-105'
-                        : cell.isCurrentMonth
-                        ? 'text-[#2D2426] font-semibold hover:bg-pink-50 hover:text-[#DB2777]'
-                        : 'text-slate-300 font-normal hover:text-slate-400'
-                    }`}
+                    className={`relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-sans transition-all ${isSelected ? 'bg-[#DB2777] text-white font-bold shadow-md shadow-pink-500/30 scale-105' : cell.isCurrentMonth ? 'text-[#2D2426] font-semibold hover:bg-pink-50 hover:text-[#DB2777]' : 'text-slate-300 font-normal hover:text-slate-400'}`}
                   >
                     <span>{cell.dayNum}</span>
-
-                    {hasEvents && !isSelected && (
-                      <span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-[#DB2777]" />
-                    )}
+                    {hasEvents && !isSelected && (<span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-[#DB2777]" />)}
                   </button>
                 </div>
               );
             })}
           </div>
-
         </div>
 
-        {/* Selected Date Events & Memory List */}
         <div className="lg:col-span-5 bg-white rounded-[28px] sm:rounded-[32px] p-6 sm:p-8 shadow-sm border border-[#FDE2E8] space-y-6">
-          
           <div className="flex items-center justify-between pb-4 border-b border-[#FDE2E8]">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#DB2777]">
-                已选日期
-              </span>
-              <h3 className="font-serif font-bold text-xl text-[#2D2426]">
-                {formatDisplayDate(selectedDateStr)}
-              </h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#DB2777]">已选日期</span>
+              <h3 className="font-serif font-bold text-xl text-[#2D2426]">{formatDisplayDate(selectedDateStr)}</h3>
             </div>
-
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 rounded-full bg-[#DB2777] hover:bg-pink-700 text-white text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              <span>添加</span>
-            </button>
+            <button onClick={() => setIsModalOpen(true)} className="px-4 py-2 rounded-full bg-[#DB2777] hover:bg-pink-700 text-white text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all"><Plus className="w-4 h-4" /><span>添加</span></button>
           </div>
 
           <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
-            {[
-              { id: 'all', label: '全部' },
-              { id: 'memory', label: '回忆' },
-              { id: 'journal', label: '日记' },
-              { id: 'note', label: '情话' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setFilterType(tab.id as any)}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                  filterType === tab.id
-                    ? 'bg-pink-100 text-[#DB2777]'
-                    : 'bg-slate-100 text-slate-600 hover:bg-pink-50'
-                }`}
-              >
-                {tab.label}
-              </button>
+            {[{ id: 'all', label: '全部' }, { id: 'memory', label: '回忆' }, { id: 'journal', label: '日记' }, { id: 'note', label: '情话' }].map((tab) => (
+              <button key={tab.id} onClick={() => setFilterType(tab.id as any)} className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${filterType === tab.id ? 'bg-pink-100 text-[#DB2777]' : 'bg-slate-100 text-slate-600 hover:bg-pink-50'}`}>{tab.label}</button>
             ))}
           </div>
 
@@ -410,200 +292,108 @@ export const CalendarPage: React.FC = () => {
             ) : selectedDateEvents.length === 0 ? (
               <div className="text-center py-12 px-4 rounded-2xl bg-pink-50/50 border border-dashed border-pink-200 space-y-3">
                 <Sparkles className="w-8 h-8 text-pink-300 mx-auto" />
-                <p className="text-xs text-slate-600 font-medium">
-                  这一天还没有留下回忆哦...
-                </p>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="px-4 py-2 rounded-full bg-pink-100 text-[#DB2777] hover:bg-pink-200 text-xs font-bold inline-flex items-center space-x-1.5 transition-all"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>记录这一刻</span>
-                </button>
+                <p className="text-xs text-slate-600 font-medium">这一天还没有留下回忆哦...</p>
+                <button onClick={() => setIsModalOpen(true)} className="px-4 py-2 rounded-full bg-pink-100 text-[#DB2777] hover:bg-pink-200 text-xs font-bold inline-flex items-center space-x-1.5 transition-all"><Plus className="w-4 h-4" /><span>记录这一刻</span></button>
               </div>
             ) : (
-              selectedDateEvents.map((evt) => (
-                <div
-                  key={evt.id}
-                  className="p-4 rounded-2xl bg-[#FFF9FA] border border-[#FDE2E8] shadow-xs hover:shadow-sm transition-all space-y-2.5 group"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center space-x-2">
-                      <span className={`p-1.5 rounded-xl border ${getEventBadgeClass(evt.type)}`}>
-                        {getEventIcon(evt.type)}
-                      </span>
-                      <div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
-                          {evt.type === 'memory' ? '回忆' : evt.type === 'journal' ? '日记' : evt.type === 'note' ? '情话' : '里程碑'}
-                        </span>
-                        <h4 className="font-serif font-bold text-sm text-[#2D2426]">
-                          {evt.title}
-                        </h4>
+              selectedDateEvents.map((evt) => {
+                // 👇 核心修改：把逗号拼接的图片拆分成数组
+                const photoList = evt.photo_url ? evt.photo_url.split(',') : [];
+                
+                return (
+                  <div key={evt.id} className="p-4 rounded-2xl bg-[#FFF9FA] border border-[#FDE2E8] shadow-xs hover:shadow-sm transition-all space-y-2.5 group">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center space-x-2">
+                        <span className={`p-1.5 rounded-xl border ${getEventBadgeClass(evt.type)}`}>{getEventIcon(evt.type)}</span>
+                        <div>
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">
+                            {evt.type === 'memory' ? '回忆' : evt.type === 'journal' ? '日记' : evt.type === 'note' ? '情话' : '里程碑'}
+                          </span>
+                          <h4 className="font-serif font-bold text-sm text-[#2D2426]">{evt.title}</h4>
+                        </div>
                       </div>
                     </div>
+
+                    {/* 👇 修改：遍历渲染多张图片，如果只有 1 张就占满，多张就两列 */}
+                    {photoList.length > 0 && (
+                      <div className={`grid gap-2 ${photoList.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                        {photoList.map((url, i) => (
+                          <div 
+                            key={i}
+                            className="rounded-xl overflow-hidden aspect-[4/3] border border-slate-100 cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => setActivePhoto({ url, title: evt.title, desc: evt.description })}
+                          >
+                            <img 
+                              src={url} 
+                              alt={evt.title} 
+                              className="w-full h-full object-cover" 
+                              referrerPolicy="no-referrer" 
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {evt.description && (<p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">{evt.description}</p>)}
+
+                    {evt.authorOrSender && (
+                      <div className="flex items-center space-x-1.5 text-[11px] text-slate-400 pt-1 border-t border-pink-100/60"><MapPin className="w-3 h-3 text-pink-400" /><span>{evt.authorOrSender}</span></div>
+                    )}
                   </div>
-
-                  {/* 👈 照片加入放大点击 */}
-                  {evt.photo_url && (
-                    <div 
-                      className="rounded-xl overflow-hidden max-h-40 border border-slate-100 cursor-pointer hover:opacity-90 transition-opacity"
-                      onClick={() => setActivePhoto({ url: evt.photo_url!, title: evt.title, desc: evt.description })}
-                    >
-                      <img
-                        src={evt.photo_url}
-                        alt={evt.title}
-                        className="w-full h-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                  )}
-
-                  {evt.description && (
-                    <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">
-                      {evt.description}
-                    </p>
-                  )}
-
-                  {evt.authorOrSender && (
-                    <div className="flex items-center space-x-1.5 text-[11px] text-slate-400 pt-1 border-t border-pink-100/60">
-                      <MapPin className="w-3 h-3 text-pink-400" />
-                      <span>{evt.authorOrSender}</span>
-                    </div>
-                  )}
-                </div>
-              ))
+                );
+              })
             )}
           </div>
-
         </div>
-
       </div>
 
       {/* Modal Add Form */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-pink-100 relative max-h-[90vh] overflow-y-auto">
-            
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-6 right-6 p-2 rounded-full text-slate-400 hover:bg-slate-100 transition-all"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 p-2 rounded-full text-slate-400 hover:bg-slate-100 transition-all"><X className="w-5 h-5" /></button>
             <div>
-              <span className="text-xs font-bold text-[#DB2777] uppercase tracking-wider">
-                {formatDisplayDate(selectedDateStr)}
-              </span>
-              <h3 className="font-serif font-bold text-2xl text-[#2D2426]">
-                添加记录 / 回忆
-              </h3>
+              <span className="text-xs font-bold text-[#DB2777] uppercase tracking-wider">{formatDisplayDate(selectedDateStr)}</span>
+              <h3 className="font-serif font-bold text-2xl text-[#2D2426]">添加记录 / 回忆</h3>
             </div>
-
             <div className="grid grid-cols-3 gap-2">
-              {[
-                { id: 'memory', label: '回忆', icon: Heart },
-                { id: 'journal', label: '日记', icon: BookOpen },
-                { id: 'note', label: '情话', icon: FileText }
-              ].map((item) => {
+              {[{ id: 'memory', label: '回忆', icon: Heart }, { id: 'journal', label: '日记', icon: BookOpen }, { id: 'note', label: '情话', icon: FileText }].map((item) => {
                 const Icon = item.icon;
                 const isSelected = addType === item.id;
                 return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setAddType(item.id as any)}
-                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-xs font-bold transition-all ${
-                      isSelected
-                        ? 'bg-[#DB2777] text-white border-[#DB2777] shadow-sm'
-                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-pink-50'
-                    }`}
-                  >
-                    <Icon className="w-5 h-5 mb-1" />
-                    <span>{item.label}</span>
+                  <button key={item.id} type="button" onClick={() => setAddType(item.id as any)} className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-xs font-bold transition-all ${isSelected ? 'bg-[#DB2777] text-white border-[#DB2777] shadow-sm' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-pink-50'}`}>
+                    <Icon className="w-5 h-5 mb-1" /><span>{item.label}</span>
                   </button>
                 );
               })}
             </div>
-
             <form onSubmit={handleCreateSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">标题 / 主题</label>
-                <input
-                  type="text"
-                  required
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  placeholder="例如：公园里的第一次约会..."
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#DB2777] text-xs"
-                />
+                <input type="text" required value={formTitle} onChange={(e) => setFormTitle(e.target.value)} placeholder="例如：公园里的第一次约会..." className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#DB2777] text-xs" />
               </div>
-
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">描述 / 内容</label>
-                <textarea
-                  rows={3}
-                  value={formDescription}
-                  onChange={(e) => setFormDescription(e.target.value)}
-                  placeholder="写下甜蜜的故事或感受..."
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#DB2777] text-xs resize-none"
-                />
+                <textarea rows={3} value={formDescription} onChange={(e) => setFormDescription(e.target.value)} placeholder="写下甜蜜的故事或感受..." className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#DB2777] text-xs resize-none" />
               </div>
-
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">地点 / 发送者</label>
-                <input
-                  type="text"
-                  value={formLocation}
-                  onChange={(e) => setFormLocation(e.target.value)}
-                  placeholder="例如：北京，那家咖啡店..."
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#DB2777] text-xs"
-                />
+                <input type="text" value={formLocation} onChange={(e) => setFormLocation(e.target.value)} placeholder="例如：北京，那家咖啡店..." className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#DB2777] text-xs" />
               </div>
-
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">照片 / 媒体</label>
-                <MediaUploader
-                  bucket="photos"
-                  label="上传照片（可选）"
-                  accept="image/*"
-                  onUploadSuccess={(url) => setFormPhotoUrl(url)}
-                />
+                <MediaUploader bucket="photos" label="上传照片（可选）" accept="image/*" onUploadSuccess={(url) => setFormPhotoUrl(url)} />
               </div>
-
               <div className="pt-2 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-full text-xs font-bold text-slate-600 hover:bg-slate-100"
-                >
-                  取消
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-full bg-[#DB2777] hover:bg-pink-700 text-white text-xs font-bold shadow-md shadow-pink-200"
-                >
-                  保存
-                </button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 rounded-full text-xs font-bold text-slate-600 hover:bg-slate-100">取消</button>
+                <button type="submit" className="px-6 py-2.5 rounded-full bg-[#DB2777] hover:bg-pink-700 text-white text-xs font-bold shadow-md shadow-pink-200">保存</button>
               </div>
             </form>
-
           </div>
         </div>
       )}
-
-      {/* 👈 放大弹窗组件 */}
-      {activePhoto && (
-        <Lightbox
-          isOpen={!!activePhoto}
-          onClose={() => setActivePhoto(null)}
-          mediaUrl={activePhoto.url}
-          mediaType="image"
-          title={activePhoto.title}
-          description={activePhoto.desc}
-        />
-      )}
-
+      
+      {activePhoto && (<Lightbox isOpen={!!activePhoto} onClose={() => setActivePhoto(null)} mediaUrl={activePhoto.url} mediaType="image" title={activePhoto.title} description={activePhoto.desc} />)}
     </div>
   );
 };
