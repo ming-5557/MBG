@@ -28,23 +28,21 @@ export const Timeline: React.FC = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      // 👇 修改：去掉了 getNotes，不再拉取小纸条数据
       const [fetchedMemories, fetchedJournals, fetchedSongs] = await Promise.all([
         dataService.getMemories(),
         dataService.getJournalEntries(),
         dataService.getSongs()
       ]);
 
-      // 👇 修改：只合并回忆和日记
       const mergedData: Memory[] = [
         ...fetchedMemories,
         ...fetchedJournals.map((j) => ({
           id: j.id,
-          title: `[日记] ${j.title}`, // 加上日记前缀
+          title: `[日记] ${j.title}`, 
           description: j.content,
           date: j.created_at ? j.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
           photo_url: j.photo_url || (j as any).attachment_url,
-          category: 'daily', // 强制归类到日常生活
+          category: 'daily', 
           location: '',
           song_id: '',
           created_at: j.created_at
@@ -219,6 +217,9 @@ export const Timeline: React.FC = () => {
             {filteredMemories.map((m, index) => {
               const linkedSong = songs.find((s) => s.id === m.song_id);
               const isEven = index % 2 === 0;
+              
+              // 👇 核心修改：取出第一张图作为时光轴的封面展示
+              const coverPhoto = m.photo_url ? m.photo_url.split(',')[0] : '';
 
               return (
                 <motion.div
@@ -247,12 +248,20 @@ export const Timeline: React.FC = () => {
                         </div>
                       </div>
 
-                      {m.photo_url && (
+                      {/* 👇 这里的 src 换成了 coverPhoto (也就是第一张图) */}
+                      {coverPhoto && (
                         <div 
-                          className="rounded-2xl overflow-hidden max-h-72 bg-pink-50 border border-pink-100/60 shadow-xs cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => setActivePhoto({ url: m.photo_url!, title: m.title, desc: m.description })}
+                          className="rounded-2xl overflow-hidden max-h-72 bg-pink-50 border border-pink-100/60 shadow-xs cursor-pointer hover:opacity-90 transition-opacity relative"
+                          onClick={() => setActivePhoto({ url: coverPhoto, title: m.title, desc: m.description })}
                         >
-                          <img src={m.photo_url} alt={m.title} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
+                          <img src={coverPhoto} alt={m.title} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
+                          
+                          {/* 如果有多张图，展示一个小角标提示 */}
+                          {m.photo_url && m.photo_url.includes(',') && (
+                            <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-full font-bold">
+                              多图
+                            </div>
+                          )}
                         </div>
                       )}
 
@@ -363,7 +372,7 @@ export const Timeline: React.FC = () => {
                   <textarea rows={3} placeholder="描述这一刻有多美好吧..." value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" />
                 </div>
                 <MediaUploader bucket="photos" label="上传回忆照片" accept="image/*" onUploadSuccess={(url) => setPhotoUrl(url)} />
-                {photoUrl && (<div className="rounded-xl overflow-hidden h-32 border border-pink-100"><img src={photoUrl} alt="Preview" className="w-full h-full object-cover" /></div>)}
+                {photoUrl && (<div className="rounded-xl overflow-hidden h-32 border border-pink-100"><img src={photoUrl.split(',')[0]} alt="Preview" className="w-full h-full object-cover" /></div>)}
               </div>
 
               <div className="p-4 sm:p-5 border-t border-pink-100 flex items-center justify-end space-x-3 shrink-0 bg-white/95 backdrop-blur-xs">
