@@ -67,29 +67,15 @@ export const Timeline: React.FC = () => {
   }, []);
 
   const openCreateModal = () => {
-    setEditingMemory(null);
-    setTitle('');
-    setDescription('');
-    setDate(new Date().toISOString().split('T')[0]);
-    setLocation('');
-    setCategory('travel');
-    setPhotoUrl('');
-    setVideoUrl('');
-    setSongId('');
-    setIsModalOpen(true);
+    setEditingMemory(null); setTitle(''); setDescription(''); setDate(new Date().toISOString().split('T')[0]);
+    setLocation(''); setCategory('travel'); setPhotoUrl(''); setVideoUrl(''); setSongId(''); setIsModalOpen(true);
   };
 
   const openEditModal = (memory: Memory) => {
-    setEditingMemory(memory);
-    setTitle(memory.title);
-    setDescription(memory.description || '');
-    setDate(memory.date || new Date().toISOString().split('T')[0]);
-    setLocation(memory.location || '');
-    setCategory(memory.category || 'travel');
-    setPhotoUrl(memory.photo_url || '');
-    setVideoUrl(memory.video_url || '');
-    setSongId(memory.song_id || '');
-    setIsModalOpen(true);
+    setEditingMemory(memory); setTitle(memory.title); setDescription(memory.description || '');
+    setDate(memory.date || new Date().toISOString().split('T')[0]); setLocation(memory.location || '');
+    setCategory(memory.category || 'travel'); setPhotoUrl(memory.photo_url || ''); setVideoUrl(memory.video_url || '');
+    setSongId(memory.song_id || ''); setIsModalOpen(true);
   };
 
   const handleSaveMemory = async (e: React.FormEvent) => {
@@ -97,30 +83,10 @@ export const Timeline: React.FC = () => {
     if (!title || !date) return;
 
     if (editingMemory) {
-      await dataService.updateMemory({
-        ...editingMemory,
-        title,
-        description,
-        date,
-        location,
-        category,
-        photo_url: photoUrl || undefined,
-        video_url: videoUrl || undefined,
-        song_id: songId || undefined
-      });
+      await dataService.updateMemory({ ...editingMemory, title, description, date, location, category, photo_url: photoUrl || undefined, video_url: videoUrl || undefined, song_id: songId || undefined });
     } else {
-      await dataService.addMemory({
-        title,
-        description,
-        date,
-        location,
-        category,
-        photo_url: photoUrl || undefined,
-        video_url: videoUrl || undefined,
-        song_id: songId || undefined
-      });
+      await dataService.addMemory({ title, description, date, location, category, photo_url: photoUrl || undefined, video_url: videoUrl || undefined, song_id: songId || undefined });
     }
-
     setIsModalOpen(false);
     await loadData();
   };
@@ -138,22 +104,11 @@ export const Timeline: React.FC = () => {
   });
 
   const categories = [
-    { id: 'all', label: '全部记录' },
-    { id: 'first_date', label: '初次约会' },
-    { id: 'travel', label: '旅行 & 游玩' },
-    { id: 'anniversary', label: '纪念日' },
-    { id: 'celebration', label: '庆祝瞬间' },
-    { id: 'daily', label: '日常生活' }
+    { id: 'all', label: '全部记录' }, { id: 'first_date', label: '初次约会' }, { id: 'travel', label: '旅行 & 游玩' },
+    { id: 'anniversary', label: '纪念日' }, { id: 'celebration', label: '庆祝瞬间' }, { id: 'daily', label: '日常生活' }
   ];
 
-  const categoryLabels: Record<string, string> = {
-    first_date: '初次约会',
-    travel: '旅行',
-    anniversary: '纪念日',
-    celebration: '庆祝',
-    daily: '日常',
-    all: '全部'
-  };
+  const categoryLabels: Record<string, string> = { first_date: '初次约会', travel: '旅行', anniversary: '纪念日', celebration: '庆祝', daily: '日常', all: '全部' };
 
   const getCategoryIcon = (cat?: string) => {
     switch (cat) {
@@ -168,42 +123,23 @@ export const Timeline: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-8">
-      
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#FFE4E9] text-[#DB2777] text-xs font-sans font-bold mb-2 border border-[#FDE2E8]">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>互动情侣日记</span>
+            <Sparkles className="w-3.5 h-3.5" /><span>互动情侣日记</span>
           </div>
-          <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-[#4A3B3E]">
-            我们的爱情时光轴
-          </h1>
-          <p className="text-xs sm:text-sm text-[#8C7A7D] mt-1 font-sans">
-            记录我们一起走过的每一步、每一个笑容和每一次日落。
-          </p>
+          <h1 className="font-serif font-extrabold text-3xl sm:text-4xl text-[#4A3B3E]">我们的爱情时光轴</h1>
+          <p className="text-xs sm:text-sm text-[#8C7A7D] mt-1 font-sans">记录我们一起走过的每一步、每一个笑容和每一次日落。</p>
         </div>
-
-        <button
-          onClick={openCreateModal}
-          className="inline-flex items-center space-x-2 px-6 py-3 rounded-full bg-[#DB2777] text-white font-sans font-bold text-xs uppercase tracking-widest shadow-lg shadow-pink-200 hover:scale-105 transition-all cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>添加新回忆</span>
+        <button onClick={openCreateModal} className="inline-flex items-center space-x-2 px-6 py-3 rounded-full bg-[#DB2777] text-white font-sans font-bold text-xs uppercase tracking-widest shadow-lg shadow-pink-200 hover:scale-105 transition-all cursor-pointer">
+          <Plus className="w-4 h-4" /><span>添加新回忆</span>
         </button>
       </div>
 
       <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
         <Filter className="w-4 h-4 text-[#DB2777] shrink-0 mr-1" />
         {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setFilterCategory(cat.id)}
-            className={`px-4 py-2 rounded-full text-xs font-sans font-bold whitespace-nowrap transition-all cursor-pointer ${
-              filterCategory === cat.id
-                ? 'bg-[#DB2777] text-white shadow-md shadow-pink-200/50'
-                : 'bg-white text-[#4A3B3E] border border-[#FDE2E8] hover:bg-[#FFE4E9]'
-            }`}
-          >
+          <button key={cat.id} onClick={() => setFilterCategory(cat.id)} className={`px-4 py-2 rounded-full text-xs font-sans font-bold whitespace-nowrap transition-all cursor-pointer ${filterCategory === cat.id ? 'bg-[#DB2777] text-white shadow-md shadow-pink-200/50' : 'bg-white text-[#4A3B3E] border border-[#FDE2E8] hover:bg-[#FFE4E9]'}`}>
             {cat.label}
           </button>
         ))}
@@ -218,18 +154,11 @@ export const Timeline: React.FC = () => {
               const linkedSong = songs.find((s) => s.id === m.song_id);
               const isEven = index % 2 === 0;
               
-              // 👇 核心修改：取出第一张图作为时光轴的封面展示
-              const coverPhoto = m.photo_url ? m.photo_url.split(',')[0] : '';
+              // 👇 核心修改：把逗号拼接的图片拆分成数组
+              const photoList = m.photo_url ? m.photo_url.split(',') : [];
 
               return (
-                <motion.div
-                  key={m.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4, delay: index * 0.08 }}
-                  className="relative flex flex-col md:flex-row items-center"
-                >
+                <motion.div key={m.id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.4, delay: index * 0.08 }} className="relative flex flex-col md:flex-row items-center">
                   <div className="absolute left-6 md:left-1/2 -translate-x-1/2 top-6 z-10 w-9 h-9 rounded-full bg-white border-2 border-pink-500 shadow-md flex items-center justify-center ring-4 ring-pink-100">
                     {getCategoryIcon(m.category)}
                   </div>
@@ -238,69 +167,39 @@ export const Timeline: React.FC = () => {
                     <div className="bg-white p-5 sm:p-6 rounded-[28px] border border-pink-100 hover:border-pink-300 shadow-lg shadow-pink-100/40 transition-all duration-300 space-y-4 group">
                       
                       <div className="flex items-center justify-between border-b border-pink-50 pb-3">
-                        <span className="px-3 py-1 rounded-full bg-pink-100/80 text-pink-600 text-[11px] font-sans font-bold uppercase tracking-wider">
-                          {m.category ? (categoryLabels[m.category] || m.category) : '回忆'}
-                        </span>
-                        
-                        <div className="flex items-center space-x-1.5 text-slate-500 text-xs font-sans font-medium">
-                          <Calendar className="w-3.5 h-3.5 text-pink-400" />
-                          <span>{m.date}</span>
-                        </div>
+                        <span className="px-3 py-1 rounded-full bg-pink-100/80 text-pink-600 text-[11px] font-sans font-bold uppercase tracking-wider">{m.category ? (categoryLabels[m.category] || m.category) : '回忆'}</span>
+                        <div className="flex items-center space-x-1.5 text-slate-500 text-xs font-sans font-medium"><Calendar className="w-3.5 h-3.5 text-pink-400" /><span>{m.date}</span></div>
                       </div>
 
-                      {/* 👇 这里的 src 换成了 coverPhoto (也就是第一张图) */}
-                      {coverPhoto && (
-                        <div 
-                          className="rounded-2xl overflow-hidden max-h-72 bg-pink-50 border border-pink-100/60 shadow-xs cursor-pointer hover:opacity-90 transition-opacity relative"
-                          onClick={() => setActivePhoto({ url: coverPhoto, title: m.title, desc: m.description })}
-                        >
-                          <img src={coverPhoto} alt={m.title} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
-                          
-                          {/* 如果有多张图，展示一个小角标提示 */}
-                          {m.photo_url && m.photo_url.includes(',') && (
-                            <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-full font-bold">
-                              多图
+                      {/* 👇 这里改成遍历渲染多图 */}
+                      {photoList.length > 0 && (
+                        <div className={`grid gap-2 ${photoList.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                          {photoList.map((url, i) => (
+                            <div key={i} className="rounded-2xl overflow-hidden aspect-square bg-pink-50 border border-pink-100/60 shadow-xs cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setActivePhoto({ url, title: m.title, desc: m.description })}>
+                              <img src={url} alt={m.title} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
                             </div>
-                          )}
+                          ))}
                         </div>
                       )}
 
-                      {m.video_url && (
-                        <div className="rounded-2xl overflow-hidden max-h-72 bg-black border border-pink-100 shadow-xs">
-                          <video src={m.video_url} controls className="w-full max-h-72" />
-                        </div>
-                      )}
+                      {m.video_url && (<div className="rounded-2xl overflow-hidden max-h-72 bg-black border border-pink-100 shadow-xs"><video src={m.video_url} controls className="w-full max-h-72" /></div>)}
 
                       <div>
                         <h3 className="font-serif font-bold text-xl text-[#4A3B3E] group-hover:text-pink-600 transition-colors">{m.title}</h3>
-                        {m.location && (
-                          <div className="flex items-center space-x-1.5 text-xs text-pink-500 mt-1 font-sans font-semibold">
-                            <MapPin className="w-3.5 h-3.5 shrink-0" /><span>{m.location}</span>
-                          </div>
-                        )}
+                        {m.location && (<div className="flex items-center space-x-1.5 text-xs text-pink-500 mt-1 font-sans font-semibold"><MapPin className="w-3.5 h-3.5 shrink-0" /><span>{m.location}</span></div>)}
                       </div>
 
                       {m.description && <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">{m.description}</p>}
 
-                      {linkedSong && (
-                        <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-pink-50/80 border border-pink-200 text-pink-700 text-xs font-semibold">
-                          <Music className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
-                          <span>专属背景乐: {linkedSong.title} — {linkedSong.artist}</span>
-                        </div>
-                      )}
+                      {linkedSong && (<div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-pink-50/80 border border-pink-200 text-pink-700 text-xs font-semibold"><Music className="w-3.5 h-3.5 text-rose-500 animate-pulse" /><span>专属背景乐: {linkedSong.title} — {linkedSong.artist}</span></div>)}
 
                       <div className="pt-3 border-t border-pink-100 flex items-center justify-between text-xs">
                         <span className="font-serif italic text-pink-400 text-xs sm:text-sm">永远永远</span>
                         <div className="flex items-center space-x-3">
-                          <button onClick={() => openEditModal(m)} className="flex items-center space-x-1 text-pink-500 hover:text-pink-700 font-sans font-bold transition-colors cursor-pointer">
-                            <Pencil className="w-3.5 h-3.5" /><span>编辑</span>
-                          </button>
-                          <button onClick={() => handleDelete(m.id)} className="flex items-center space-x-1 text-rose-400 hover:text-rose-600 font-sans font-bold transition-colors cursor-pointer">
-                            <Trash2 className="w-3.5 h-3.5" /><span>删除</span>
-                          </button>
+                          <button onClick={() => openEditModal(m)} className="flex items-center space-x-1 text-pink-500 hover:text-pink-700 font-sans font-bold transition-colors cursor-pointer"><Pencil className="w-3.5 h-3.5" /><span>编辑</span></button>
+                          <button onClick={() => handleDelete(m.id)} className="flex items-center space-x-1 text-rose-400 hover:text-rose-600 font-sans font-bold transition-colors cursor-pointer"><Trash2 className="w-3.5 h-3.5" /><span>删除</span></button>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 </motion.div>
@@ -323,41 +222,23 @@ export const Timeline: React.FC = () => {
         <div className="fixed inset-0 z-[100] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 pt-16 sm:pt-20 overflow-y-auto">
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="glass-card bg-white max-w-xl w-full rounded-3xl shadow-2xl border border-pink-200 flex flex-col max-h-[90vh] my-auto overflow-hidden">
             <div className="p-4 sm:p-5 border-b border-pink-100 flex items-center justify-between shrink-0 bg-white">
-              <h3 className="font-serif font-bold text-lg sm:text-xl text-slate-800 flex items-center space-x-2">
-                <Sparkles className="w-5 h-5 text-pink-500" />
-                <span>{editingMemory ? '编辑记录' : '添加新回忆'}</span>
-              </h3>
-              <button type="button" onClick={() => setIsModalOpen(false)} className="p-2 rounded-full hover:bg-pink-50 text-slate-400 hover:text-pink-600 transition-colors cursor-pointer">
-                <X className="w-5 h-5" />
-              </button>
+              <h3 className="font-serif font-bold text-lg sm:text-xl text-slate-800 flex items-center space-x-2"><Sparkles className="w-5 h-5 text-pink-500" /><span>{editingMemory ? '编辑记录' : '添加新回忆'}</span></h3>
+              <button type="button" onClick={() => setIsModalOpen(false)} className="p-2 rounded-full hover:bg-pink-50 text-slate-400 hover:text-pink-600 transition-colors cursor-pointer"><X className="w-5 h-5" /></button>
             </div>
 
             <form onSubmit={handleSaveMemory} className="flex flex-col overflow-hidden flex-1">
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">回忆标题</label>
-                  <input type="text" required placeholder="例如：在低语悬崖看星星" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" />
-                </div>
+                <div><label className="block text-xs font-semibold text-slate-700 mb-1">回忆标题</label><input type="text" required placeholder="例如：在低语悬崖看星星" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" /></div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">日期</label>
-                    <input type="date" required value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" />
-                  </div>
+                  <div><label className="block text-xs font-semibold text-slate-700 mb-1">日期</label><input type="date" required value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" /></div>
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">分类</label>
                     <select value={category} onChange={(e) => setCategory(e.target.value as any)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white">
-                      <option value="first_date">初次约会</option>
-                      <option value="travel">旅行 & 游玩</option>
-                      <option value="anniversary">纪念日</option>
-                      <option value="celebration">庆祝瞬间</option>
-                      <option value="daily">日常生活</option>
+                      <option value="first_date">初次约会</option><option value="travel">旅行 & 游玩</option><option value="anniversary">纪念日</option><option value="celebration">庆祝瞬间</option><option value="daily">日常生活</option>
                     </select>
                   </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">地点</label>
-                  <input type="text" placeholder="例如：红木植物园" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" />
-                </div>
+                <div><label className="block text-xs font-semibold text-slate-700 mb-1">地点</label><input type="text" placeholder="例如：红木植物园" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" /></div>
                 {songs.length > 0 && (
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">关联专属歌曲</label>
@@ -367,10 +248,7 @@ export const Timeline: React.FC = () => {
                     </select>
                   </div>
                 )}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">回忆故事</label>
-                  <textarea rows={3} placeholder="描述这一刻有多美好吧..." value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" />
-                </div>
+                <div><label className="block text-xs font-semibold text-slate-700 mb-1">回忆故事</label><textarea rows={3} placeholder="描述这一刻有多美好吧..." value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:border-pink-400 text-xs sm:text-sm outline-none bg-white" /></div>
                 <MediaUploader bucket="photos" label="上传回忆照片" accept="image/*" onUploadSuccess={(url) => setPhotoUrl(url)} />
                 {photoUrl && (<div className="rounded-xl overflow-hidden h-32 border border-pink-100"><img src={photoUrl.split(',')[0]} alt="Preview" className="w-full h-full object-cover" /></div>)}
               </div>
@@ -384,9 +262,7 @@ export const Timeline: React.FC = () => {
         </div>
       )}
 
-      {activePhoto && (
-        <Lightbox isOpen={!!activePhoto} onClose={() => setActivePhoto(null)} mediaUrl={activePhoto.url} mediaType="image" title={activePhoto.title} description={activePhoto.desc} />
-      )}
+      {activePhoto && (<Lightbox isOpen={!!activePhoto} onClose={() => setActivePhoto(null)} mediaUrl={activePhoto.url} mediaType="image" title={activePhoto.title} description={activePhoto.desc} />)}
     </div>
   );
 };
